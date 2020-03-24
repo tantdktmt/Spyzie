@@ -3,6 +3,7 @@
     package="com.tantd.spyzie">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".SpyzieApplication"
