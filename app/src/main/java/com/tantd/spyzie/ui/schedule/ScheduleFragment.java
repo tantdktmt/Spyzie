@@ -32,11 +32,11 @@ import javax.inject.Inject;
  */
 public class ScheduleFragment extends BaseFragment implements ScheduleContract.View, WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
+    @Inject
+    SchedulePresenter mPresenter;
+
     private WeekView mWeekView;
     private List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
-
-    @Inject
-    ScheduleContract.Presenter mPresenter;
 
     public ScheduleFragment() {
     }

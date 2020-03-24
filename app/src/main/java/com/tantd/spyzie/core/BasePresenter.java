@@ -5,6 +5,8 @@ import com.tantd.spyzie.data.network.AppApiHelper;
 import com.tantd.spyzie.util.rx.AppSchedulerProvider;
 import com.tantd.spyzie.util.rx.SchedulerProvider;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
@@ -16,13 +18,13 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
 
     protected V view;
     protected final SchedulerProvider schedulerProvider;
-    protected final CompositeDisposable compositeDisposable;
     protected final ApiHelper apiHelper;
+    protected CompositeDisposable compositeDisposable;
 
-    public BasePresenter() {
-        schedulerProvider = AppSchedulerProvider.getInstance();
-        compositeDisposable = new CompositeDisposable();
-        apiHelper = AppApiHelper.getInstance();
+    public BasePresenter(SchedulerProvider schedulerProvider, ApiHelper apiHelper, CompositeDisposable compositeDisposable) {
+        this.schedulerProvider = schedulerProvider;
+        this.apiHelper = apiHelper;
+        this.compositeDisposable = compositeDisposable;
     }
 
     @Override
@@ -34,6 +36,7 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
     public void onDetach() {
         view = null;
         compositeDisposable.dispose();
+        compositeDisposable = null;
     }
 
     @Override
