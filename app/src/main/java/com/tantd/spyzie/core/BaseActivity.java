@@ -29,9 +29,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     public static final int ANIM_FADE_IN_FADE_OUT = 5;
     public static final int ANIM_DEFAULT = ANIM_LEFT_TO_RIGHT;
 
-    private SingleClick mSingleClick;
-    private SingleItemClick mSingleItemClick;
-
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -152,22 +149,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 break;
         }
-    }
-
-    public SingleClick getSingleClick(SingleClick.SingleClickListener listener) {
-        if (mSingleClick == null) {
-            mSingleClick = new SingleClick();
-            mSingleClick.setListener(listener);
-        }
-        return mSingleClick;
-    }
-
-    public SingleItemClick getSingleItemClick(SingleItemClick.SingleItemClickListener listener) {
-        if (mSingleItemClick == null) {
-            mSingleItemClick = new SingleItemClick();
-            mSingleItemClick.setListener(listener);
-        }
-        return mSingleItemClick;
     }
 
     public void hideKeyboard() {

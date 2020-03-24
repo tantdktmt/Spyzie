@@ -6,6 +6,9 @@ import android.content.Context;
 import androidx.multidex.MultiDex;
 
 import com.androidnetworking.AndroidNetworking;
+import com.tantd.spyzie.di.component.AppComponent;
+import com.tantd.spyzie.di.component.DaggerAppComponent;
+import com.tantd.spyzie.di.module.AppModule;
 
 /**
  * Created by tantd on 2/7/2020.

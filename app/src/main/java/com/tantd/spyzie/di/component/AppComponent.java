@@ -1,5 +1,7 @@
-package com.tantd.spyzie;
+package com.tantd.spyzie.di.component;
 
+import com.tantd.spyzie.di.module.AppModule;
+import com.tantd.spyzie.di.module.ServiceModule;
 import com.tantd.spyzie.ui.schedule.ScheduleActivity;
 import com.tantd.spyzie.ui.schedule.ScheduleFragment;
 
@@ -14,4 +16,6 @@ public interface AppComponent {
     void inject(ScheduleActivity activity);
 
     void inject(ScheduleFragment fragment);
+
+    ServiceComponent plus(ServiceModule module);
 }
