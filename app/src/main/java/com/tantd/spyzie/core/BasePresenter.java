@@ -1,11 +1,7 @@
 package com.tantd.spyzie.core;
 
-import com.tantd.spyzie.data.network.ApiHelper;
-import com.tantd.spyzie.data.network.AppApiHelper;
-import com.tantd.spyzie.util.rx.AppSchedulerProvider;
+import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.util.rx.SchedulerProvider;
-
-import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -18,12 +14,12 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
 
     protected V view;
     protected final SchedulerProvider schedulerProvider;
-    protected final ApiHelper apiHelper;
+    protected final ApiManager mApiManager;
     protected CompositeDisposable compositeDisposable;
 
-    public BasePresenter(SchedulerProvider schedulerProvider, ApiHelper apiHelper, CompositeDisposable compositeDisposable) {
+    public BasePresenter(SchedulerProvider schedulerProvider, ApiManager apiManager, CompositeDisposable compositeDisposable) {
         this.schedulerProvider = schedulerProvider;
-        this.apiHelper = apiHelper;
+        this.mApiManager = apiManager;
         this.compositeDisposable = compositeDisposable;
     }
 

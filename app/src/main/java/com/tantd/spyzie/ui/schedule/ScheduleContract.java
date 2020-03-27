@@ -2,8 +2,8 @@ package com.tantd.spyzie.ui.schedule;
 
 import com.tantd.spyzie.core.BasePresenter;
 import com.tantd.spyzie.core.IView;
-import com.tantd.spyzie.data.network.ApiHelper;
-import com.tantd.spyzie.data.network.model.Event;
+import com.tantd.spyzie.data.network.ApiManager;
+import com.tantd.spyzie.data.model.Event;
 import com.tantd.spyzie.util.rx.SchedulerProvider;
 
 import java.util.List;
@@ -20,8 +20,8 @@ public interface ScheduleContract {
 
     abstract class Presenter extends BasePresenter<View> {
 
-        public Presenter(SchedulerProvider schedulerProvider, ApiHelper apiHelper, CompositeDisposable compositeDisposable) {
-            super(schedulerProvider, apiHelper, compositeDisposable);
+        public Presenter(SchedulerProvider schedulerProvider, ApiManager apiManager, CompositeDisposable compositeDisposable) {
+            super(schedulerProvider, apiManager, compositeDisposable);
         }
 
         public abstract void loadSchedule();

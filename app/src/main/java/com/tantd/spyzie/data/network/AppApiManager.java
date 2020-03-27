@@ -1,7 +1,7 @@
 package com.tantd.spyzie.data.network;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
-import com.tantd.spyzie.data.network.model.Event;
+import com.tantd.spyzie.data.model.Event;
 
 import java.util.List;
 
@@ -11,18 +11,18 @@ import io.reactivex.Single;
  * Created by HP on 8/21/2017.
  */
 
-public class AppApiHelper implements ApiHelper {
+public class AppApiManager implements ApiManager {
 
-    private static AppApiHelper instance;
+    private static AppApiManager instance;
 
-    public static synchronized AppApiHelper getInstance() {
+    public static synchronized AppApiManager getInstance() {
         if (instance == null) {
-            instance = new AppApiHelper();
+            instance = new AppApiManager();
         }
         return instance;
     }
 
-    private AppApiHelper() {
+    private AppApiManager() {
     }
 
     @Override

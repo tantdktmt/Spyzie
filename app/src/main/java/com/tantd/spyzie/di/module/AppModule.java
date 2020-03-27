@@ -5,8 +5,10 @@ import android.content.Context;
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.core.SingleClick;
 import com.tantd.spyzie.core.SingleItemClick;
-import com.tantd.spyzie.data.network.ApiHelper;
-import com.tantd.spyzie.data.network.AppApiHelper;
+import com.tantd.spyzie.data.device.AppDeviceDataManager;
+import com.tantd.spyzie.data.device.DeviceDataManager;
+import com.tantd.spyzie.data.network.ApiManager;
+import com.tantd.spyzie.data.network.AppApiManager;
 import com.tantd.spyzie.di.ApplicationContext;
 import com.tantd.spyzie.util.rx.AppSchedulerProvider;
 import com.tantd.spyzie.util.rx.SchedulerProvider;
@@ -45,8 +47,14 @@ public class AppModule {
 
     @Singleton
     @Provides
-    public ApiHelper provideApiHelper() {
-        return AppApiHelper.getInstance();
+    public ApiManager provideApiHelper() {
+        return AppApiManager.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public DeviceDataManager provideDeviceDataManager() {
+        return AppDeviceDataManager.getInstance();
     }
 
     @Provides

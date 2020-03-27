@@ -1,7 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+    ext.versions = [:]
+    versions.lifecycle = "2.0.0"
+    versions.work = "2.3.4"
+
     repositories {
         google()
         jcenter()
