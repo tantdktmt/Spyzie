@@ -1,4 +1,4 @@
-package com.tantd.spyzie.data.network.model;
+package com.tantd.spyzie.data.model;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;

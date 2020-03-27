@@ -17,7 +17,7 @@ import com.alamkanak.weekview.WeekViewEvent;
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.core.BaseFragment;
-import com.tantd.spyzie.data.network.model.Event;
+import com.tantd.spyzie.data.model.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ import com.tantd.spyzie.SpyzieApplication;
 /**
  * Created by tantd on 2/7/2020.
  */
-public class AppPreferencesHelper {
+public class AppPreferencesManager {
 
     private static final String PREFS_FILE_NAME = "app_prefs";
 
@@ -16,16 +16,16 @@ public class AppPreferencesHelper {
 
     private final SharedPreferences mPrefs;
 
-    private static AppPreferencesHelper instance;
+    private static AppPreferencesManager instance;
 
-    public static AppPreferencesHelper getInstance() {
+    public static AppPreferencesManager getInstance() {
         if (instance == null) {
-            instance = new AppPreferencesHelper();
+            instance = new AppPreferencesManager();
         }
         return instance;
     }
 
-    private AppPreferencesHelper() {
+    private AppPreferencesManager() {
         mPrefs = SpyzieApplication.getInstance().getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE);
     }
 
