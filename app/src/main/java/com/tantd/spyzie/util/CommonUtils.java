@@ -1,12 +1,17 @@
 package com.tantd.spyzie.util;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.LocationManager;
 import android.provider.Settings;
+
+import androidx.core.app.ActivityCompat;
 
 import com.tantd.spyzie.R;
 
@@ -21,7 +26,7 @@ import java.util.regex.Pattern;
 /**
  * Created by tantd on 8/22/2017.
  */
-public class CommonUtils {
+public final class CommonUtils {
     private static final String TAG = CommonUtils.class.getName();
 
     private CommonUtils() {
@@ -79,5 +84,16 @@ public class CommonUtils {
 
     public static String getTimeStamp() {
         return new SimpleDateFormat(Constants.TIMESTAMP_FORMAT, Locale.US).format(new Date());
+    }
+
+    public static boolean checkPermissions(Context context) {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean isLocationTurnOn(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 }

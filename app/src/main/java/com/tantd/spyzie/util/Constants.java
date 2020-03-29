@@ -6,7 +6,6 @@ package com.tantd.spyzie.util;
 public final class Constants {
 
     public static final String LOG_TAG = "SPYZIE_DEBUG";
-    public static final String EMPTY_TEXT = "";
     public static final long SINGLE_CLICK_THRESHOLD = 1000;
     public static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
     public static final boolean IS_DEBUG_MODE = true;
