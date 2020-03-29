@@ -1,6 +1,6 @@
 package com.tantd.spyzie.di.component;
 
-import com.tantd.spyzie.MyAppWidget;
+import com.tantd.spyzie.ui.widget.MyAppWidget;
 import com.tantd.spyzie.di.module.AppModule;
 import com.tantd.spyzie.di.module.ServiceModule;
 import com.tantd.spyzie.ui.schedule.ScheduleActivity;

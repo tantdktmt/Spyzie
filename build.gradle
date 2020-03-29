@@ -4,6 +4,7 @@ buildscript {
     ext.versions = [:]
     versions.lifecycle = "2.0.0"
     versions.work = "2.3.4"
+    versions.location = "17.0.0"
 
     repositories {
         google()

