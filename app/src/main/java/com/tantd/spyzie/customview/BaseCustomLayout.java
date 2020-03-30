@@ -1,4 +1,4 @@
-package com.tantd.spyzie.ui;
+package com.tantd.spyzie.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
