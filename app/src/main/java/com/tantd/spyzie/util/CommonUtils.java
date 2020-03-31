@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.tantd.spyzie.R;
 
@@ -89,6 +90,10 @@ public final class CommonUtils {
     public static boolean checkPermissions(Context context) {
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean checkReadContactsPermission(Context context) {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static boolean isLocationTurnOn(Context context) {
