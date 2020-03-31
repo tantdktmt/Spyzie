@@ -1,5 +1,6 @@
 package com.tantd.spyzie.di.component;
 
+import com.tantd.spyzie.service.LocationService;
 import com.tantd.spyzie.ui.widget.MyAppWidget;
 import com.tantd.spyzie.di.module.AppModule;
 import com.tantd.spyzie.di.module.ServiceModule;
@@ -19,6 +20,8 @@ public interface AppComponent {
     void inject(ScheduleFragment fragment);
 
     void inject(MyAppWidget appWidget);
+
+    void inject(LocationService service);
 
     ServiceComponent plus(ServiceModule module);
 }
