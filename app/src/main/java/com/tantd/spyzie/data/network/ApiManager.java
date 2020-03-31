@@ -1,5 +1,7 @@
 package com.tantd.spyzie.data.network;
 
+import android.location.Location;
+
 import com.tantd.spyzie.data.model.Event;
 
 import java.util.List;
@@ -12,4 +14,6 @@ import io.reactivex.Single;
 public interface ApiManager {
 
     Single<List<Event>> getSchedules();
+
+    void sendLocationData(Location location);
 }
