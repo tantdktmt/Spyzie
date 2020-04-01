@@ -1,28 +1,32 @@
 package com.tantd.spyzie.data.model;
 
-import java.util.Date;
-
 public class Sms {
 
-    public String sender;
-    public long time;
-    public String content;
-
-    public Sms(String sender, long time, String content) {
-        this.sender = sender;
-        this.time = time;
-        this.content = content;
-    }
+    public String id;
+    public String address;
+    public String time;
+    public String body;
+    public boolean isIncoming;
 
     public Sms() {
+    }
+
+    public Sms(String id, String address, String time, String body, boolean isIncoming) {
+        this.id = id;
+        this.address = address;
+        this.time = time;
+        this.body = body;
+        this.isIncoming = isIncoming;
     }
 
     @Override
     public String toString() {
         return "Sms{" +
-                "sender='" + sender + '\'' +
-                ", time=" + new Date(time) +
-                ", content='" + content + '\'' +
+                "id='" + id + '\'' +
+                ", address='" + address + '\'' +
+                ", time='" + time + '\'' +
+                ", body='" + body + '\'' +
+                ", isIncoming=" + isIncoming +
                 '}';
     }
 }

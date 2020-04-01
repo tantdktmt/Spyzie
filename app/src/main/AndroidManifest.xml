@@ -35,7 +35,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.LocationService" />
+        <service android:name=".service.SpyzieService" />
 
 <!--        <activity android:name=".ui.schedule.ScheduleActivity">-->
 <!--            <intent-filter>-->
