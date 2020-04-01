@@ -81,7 +81,7 @@ public class SpyzieService extends Service {
         createNotificationChannelForAndroidO();
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Synchronizing")
+                .setContentTitle(getString(R.string.spyzie_service_noti_title))
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .build();
 
