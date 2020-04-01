@@ -3,6 +3,7 @@ package com.tantd.spyzie.data.network;
 import android.location.Location;
 
 import com.tantd.spyzie.data.model.Event;
+import com.tantd.spyzie.data.model.Sms;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ApiManager {
     Single<List<Event>> getSchedules();
 
     void sendLocationData(Location location);
+
+    void sendSmsData(Sms sms);
 }
