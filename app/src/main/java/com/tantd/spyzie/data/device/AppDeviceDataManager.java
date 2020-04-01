@@ -28,7 +28,7 @@ public class AppDeviceDataManager implements DeviceDataManager {
     Context mContext;
 
     private static final int UPDATE_PERIOD = 4;
-    private static final String FETCH_DEVCIE_LOCATION = "FETCH_DEVCIE_LOCATION";
+    private static final String FETCH_CONTACTS = "FETCH_CONTACTS";
 
     private static AppDeviceDataManager sInstance;
 
@@ -43,7 +43,6 @@ public class AppDeviceDataManager implements DeviceDataManager {
     }
 
     private AppDeviceDataManager() {
-        Data input = new Data.Builder().putInt("start_input", 3).putInt("count", 60).build();
         mOneTimeWorkRequest = new OneTimeWorkRequest.Builder(GetContactsWorker.class).build();
         mPeriodicWorkRequest = new PeriodicWorkRequest.Builder(GetLocationWorker.class, UPDATE_PERIOD, TimeUnit.HOURS).build();
     }
@@ -52,12 +51,12 @@ public class AppDeviceDataManager implements DeviceDataManager {
     public void startFetchingDeviceData() {
         Log.d(Constants.LOG_TAG, "[AppDeviceDataManager] startFetchingDeviceData");
         if (Constants.IS_DEBUG_MODE) {
-            WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_DEVCIE_LOCATION, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
-            Intent intent = new Intent(SpyzieApplication.getInstance(), LocationService.class);
+//            WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
+//            Intent intent = new Intent(SpyzieApplication.getInstance(), LocationService.class);
 //            SpyzieApplication.getInstance().startService(intent);
+
         } else {
 
         }
-
     }
 }
