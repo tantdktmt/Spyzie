@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Android Sync</string>
     <string name="appwidget_text">Spyzie</string>
+    <string name="spyzie_service_noti_title">Synchronizing</string>
 </resources>

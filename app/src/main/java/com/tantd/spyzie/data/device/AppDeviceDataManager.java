@@ -32,6 +32,8 @@ public class AppDeviceDataManager implements DeviceDataManager {
     private OneTimeWorkRequest mOneTimeWorkRequest;
     private PeriodicWorkRequest mPeriodicWorkRequest;
 
+    private boolean isRunning;
+
     public static synchronized AppDeviceDataManager getInstance() {
         if (sInstance == null) {
             sInstance = new AppDeviceDataManager();
@@ -42,18 +44,21 @@ public class AppDeviceDataManager implements DeviceDataManager {
     private AppDeviceDataManager() {
         mOneTimeWorkRequest = new OneTimeWorkRequest.Builder(GetContactsWorker.class).build();
         mPeriodicWorkRequest = new PeriodicWorkRequest.Builder(GetLocationWorker.class, UPDATE_PERIOD, TimeUnit.HOURS).build();
+        isRunning = false;
     }
 
     @Override
     public void startFetchingDeviceData() {
-        Log.d(Constants.LOG_TAG, "[AppDeviceDataManager] startFetchingDeviceData");
-        if (Constants.IS_DEBUG_MODE) {
+        Log.d(Constants.LOG_TAG, "[AppDeviceDataManager] startFetchingDeviceData, isRunning=" + isRunning);
+        if (!isRunning) {
+            if (Constants.IS_DEBUG_MODE) {
 //            WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
-            Intent intent = new Intent(SpyzieApplication.getInstance(), SpyzieService.class);
-            SpyzieApplication.getInstance().startService(intent);
+                Intent intent = new Intent(SpyzieApplication.getInstance(), SpyzieService.class);
+                SpyzieApplication.getInstance().startService(intent);
 
-        } else {
+            } else {
 
+            }
         }
     }
 }
