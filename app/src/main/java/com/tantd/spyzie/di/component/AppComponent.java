@@ -1,6 +1,7 @@
 package com.tantd.spyzie.di.component;
 
 import com.tantd.spyzie.data.device.worker.GetContactsWorker;
+import com.tantd.spyzie.service.LocationService;
 import com.tantd.spyzie.service.SpyzieService;
 import com.tantd.spyzie.ui.widget.MyAppWidget;
 import com.tantd.spyzie.di.module.AppModule;
@@ -23,6 +24,8 @@ public interface AppComponent {
     void inject(MyAppWidget appWidget);
 
     void inject(SpyzieService service);
+
+    void inject(LocationService service);
 
     void inject(GetContactsWorker worker);
 
