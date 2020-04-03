@@ -87,13 +87,14 @@ public final class CommonUtils {
         return new SimpleDateFormat(Constants.TIMESTAMP_FORMAT, Locale.US).format(new Date());
     }
 
-    public static boolean checkPermissions(Context context) {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    public static boolean checkReadContactsPermission(Context context) {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    public static boolean hasPermissions(Context context, String[] permissions) {
+        for (String permission :
+                permissions) {
+            if (!(ActivityCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isLocationTurnOn(Context context) {

