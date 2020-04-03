@@ -59,9 +59,9 @@ public class AppDeviceDataManager implements DeviceDataManager {
         Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "startFetchingDeviceData, isRunning=" + isRunning);
         if (!isRunning) {
             if (Constants.IS_DEBUG_MODE) {
-                WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
-                Intent intent = new Intent(SpyzieApplication.getInstance(), SpyzieService.class);
-                SpyzieApplication.getInstance().startService(intent);
+//                WorkManager.getInstance(mContext).enqueueUniqueWork(FETCH_CONTACTS, ExistingWorkPolicy.KEEP, mOneTimeWorkRequest);
+//                Intent intent = new Intent(SpyzieApplication.getInstance(), SpyzieService.class);
+//                SpyzieApplication.getInstance().startService(intent);
             } else {
 
             }

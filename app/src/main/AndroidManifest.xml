@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".SpyzieApplication"
@@ -29,21 +30,10 @@
                 android:resource="@xml/my_app_widget_info" />
         </receiver>
 
-        <receiver android:name=".receiver.SpyzieReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
         <service android:name=".service.SpyzieService" />
 
-<!--        <activity android:name=".ui.schedule.ScheduleActivity">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <service
+            android:name=".service.LocationService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
-
 </manifest>
