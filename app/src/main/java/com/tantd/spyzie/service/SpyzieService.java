@@ -37,10 +37,10 @@ public class SpyzieService extends Service {
 
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
 
-    private static final String DEBUG_SUB_TAG = "[" + SpyzieService.class.getSimpleName() + "] ";
-
     @Inject
     ApiManager mApiManager;
+
+    private static final String DEBUG_SUB_TAG = "[" + SpyzieService.class.getSimpleName() + "] ";
 
     private static final int UPDATE_INTERVAL = 10 * 1000;
     private static final int FASTEST_UPDATE_INTERVAL = 10 * 1000;
