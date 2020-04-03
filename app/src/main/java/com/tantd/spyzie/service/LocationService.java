@@ -116,7 +116,7 @@ public class LocationService extends JobIntentService {
 
     @Override
     public void onCreate() {
-        SpyzieApplication.getInstance().getAppComponent().inject(this);
+        SpyzieApplication.getInstance().getServiceComponent().inject(this);
         super.onCreate();
         Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onCreate()");
 
