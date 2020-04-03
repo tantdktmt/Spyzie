@@ -12,10 +12,8 @@ import android.location.LocationManager;
 import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.tantd.spyzie.R;
-import com.tantd.spyzie.service.SpyzieService;
 
 import java.io.IOException;
 import java.io.InputStream;

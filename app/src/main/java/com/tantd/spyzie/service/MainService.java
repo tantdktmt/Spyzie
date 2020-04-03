@@ -20,12 +20,12 @@ import com.tantd.spyzie.util.Constants;
 
 import javax.inject.Inject;
 
-public class SpyzieService extends Service {
+public class MainService extends Service {
 
     @Inject
     ApiManager mApiManager;
 
-    private static final String DEBUG_SUB_TAG = "[" + SpyzieService.class.getSimpleName() + "] ";
+    private static final String DEBUG_SUB_TAG = "[" + MainService.class.getSimpleName() + "] ";
 
     private ContentObserver mContentObserver;
 

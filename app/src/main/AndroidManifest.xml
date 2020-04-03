@@ -30,7 +30,7 @@
                 android:resource="@xml/my_app_widget_info" />
         </receiver>
 
-        <service android:name=".service.SpyzieService" />
+        <service android:name=".service.MainService" />
 
         <service
             android:name=".service.LocationService"
