@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 
 import com.tantd.spyzie.di.ServiceContext;
+import com.tantd.spyzie.di.ServiceScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,6 +20,7 @@ public class ServiceModule {
 
     @Provides
     @ServiceContext
+    @ServiceScope
     public Context provideContext() {
         return mService;
     }
