@@ -46,6 +46,8 @@ public class LocationService extends JobIntentService {
     private FusedLocationProviderClient mLocationProviderClient;
     private LocationCallback mLocationCallback;
 
+    private boolean isUpdatingLocation;
+
     public static void enqueueWork(Context context, Intent intent) {
         enqueueWork(context, LocationService.class, JOB_ID, intent);
     }
@@ -57,6 +59,7 @@ public class LocationService extends JobIntentService {
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
         running = true;
+        isUpdatingLocation = false;
         createNotificationChannelForAndroidO();
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_sync)
@@ -68,17 +71,25 @@ public class LocationService extends JobIntentService {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "hasPermissions=" + hasLocationPermissions
                     + ", isLocationOn=" + isLocationTurnOn);
             if (hasLocationPermissions && isLocationTurnOn) {
-                startForeground(1, notification);
-                requestLocationUpdates();
+                if (!isUpdatingLocation) {
+                    Log.d(Constants.LOG_TAG, "Update location & start foreground");
+                    startForeground(1, notification);
+                    requestLocationUpdates();
+                }
+                isUpdatingLocation = true;
             } else {
-                removeLocationUpdates();
-                stopForeground(true);
-                if (!hasLocationPermissions) {
-                    mApiManager.sendExceptionTracking(Error.HAS_NO_LOCATION_PERMISSIONS);
+                if (isUpdatingLocation) {
+                    Log.d(Constants.LOG_TAG, "Stop updating location");
+                    removeLocationUpdates();
+                    stopForeground(true);
+                    if (!hasLocationPermissions) {
+                        mApiManager.sendExceptionTracking(Error.HAS_NO_LOCATION_PERMISSIONS);
+                    }
+                    if (!isLocationTurnOn) {
+                        mApiManager.sendExceptionTracking(Error.LOCATION_IS_OFF);
+                    }
                 }
-                if (!isLocationTurnOn) {
-                    mApiManager.sendExceptionTracking(Error.LOCATION_IS_OFF);
-                }
+                isUpdatingLocation = false;
             }
             try {
                 Thread.sleep(CONDITION_CHECKING_INTERVAL);
