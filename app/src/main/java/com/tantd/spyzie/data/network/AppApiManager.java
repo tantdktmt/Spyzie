@@ -4,6 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
+import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.model.Event;
@@ -62,6 +63,19 @@ public class AppApiManager implements ApiManager {
     public void sendContactsData(List<Contact> contacts) {
         // TODO: implement here
         printContacts(contacts);
+    }
+
+    @Override
+    public void sendCallsData(List<Call> calls) {
+        // TODO: implement here
+        print(calls);
+    }
+
+    private <T> void print(List<T> objects) {
+        for (T t :
+                objects) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + t);
+        }
     }
 
     private void printContacts(List<Contact> contacts) {

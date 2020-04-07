@@ -27,7 +27,5 @@ public interface AppComponent {
 
     void inject(LocationService service);
 
-    void inject(GetContactsWorker worker);
-
     ServiceComponent plus(ServiceModule module);
 }

