@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ui.note.NoteActivity"
+                tools:ignore="RtlHardcoded">
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:onClick="onAddButtonClick"
+        android:text="Add"/>
+
+    <EditText
+        android:id="@+id/editTextNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/buttonAdd"
+        android:hint="Enter new note"
+        android:imeOptions="actionDone"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/bt_get_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextNote"
+        android:text="Get notes"
+        android:onClick="onGetNoteButtonClicked"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/bt_delete_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bt_get_notes"
+        android:text="Delete notes"
+        android:onClick="onDeleteNotesButtonClicked"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/textViewNoteInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bt_delete_notes"
+        android:gravity="center_horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Click to remove"
+        android:textSize="12sp"/>
+
+    <ListView
+        android:id="@+id/listViewNotes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textViewNoteInstructions"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="4dp"
+        android:scrollbars="vertical"/>
+
+</RelativeLayout>
