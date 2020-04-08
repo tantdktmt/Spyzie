@@ -2,16 +2,16 @@ package com.tantd.spyzie.data.model;
 
 public class Sms {
 
-    public String id;
+    public long id;
     public String address;
-    public String time;
+    public long time;
     public String body;
     public boolean isIncoming;
 
     public Sms() {
     }
 
-    public Sms(String id, String address, String time, String body, boolean isIncoming) {
+    public Sms(long id, String address, long time, String body, boolean isIncoming) {
         this.id = id;
         this.address = address;
         this.time = time;
@@ -22,9 +22,9 @@ public class Sms {
     @Override
     public String toString() {
         return "Sms{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", address='" + address + '\'' +
-                ", time='" + time + '\'' +
+                ", time=" + time +
                 ", body='" + body + '\'' +
                 ", isIncoming=" + isIncoming +
                 '}';
