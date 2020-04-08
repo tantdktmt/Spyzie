@@ -59,7 +59,7 @@ public class GetContactsWorker extends Worker {
         List<String> phone = null;
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
                     phone = getPhoneNumber(contentResolver, id);
@@ -73,12 +73,12 @@ public class GetContactsWorker extends Worker {
         return contacts;
     }
 
-    private List<String> getPhoneNumber(ContentResolver contentResolver, String id) {
+    private List<String> getPhoneNumber(ContentResolver contentResolver, long id) {
         List<String> numbers = new ArrayList<>();
         Cursor cursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI
                 , null
                 , ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?"
-                , new String[]{id}, null);
+                , new String[]{String.valueOf(id)}, null);
         while (cursor.moveToNext()) {
             String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             numbers.add(phoneNumber);
