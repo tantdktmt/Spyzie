@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.multidex.MultiDex;
 
 import com.androidnetworking.AndroidNetworking;
+import com.tantd.spyzie.core.ObjectBox;
 import com.tantd.spyzie.di.component.AppComponent;
 import com.tantd.spyzie.di.component.DaggerAppComponent;
 import com.tantd.spyzie.di.component.ServiceComponent;
@@ -27,6 +28,7 @@ public class SpyzieApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        ObjectBox.init(this);
         AndroidNetworking.initialize(getApplicationContext());
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
     }

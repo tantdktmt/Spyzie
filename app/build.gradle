@@ -12,6 +12,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ "objectbox.incremental" : "true" ]
+            }
+        }
     }
 
     buildTypes {
@@ -46,4 +52,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
     implementation "androidx.work:work-runtime:$versions.work"
     implementation "com.google.android.gms:play-services-location:$versions.location"
+    implementation "io.objectbox:objectbox-android:$versions.objectboxVersion"
 }
+
+apply plugin: 'io.objectbox'
