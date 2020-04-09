@@ -15,6 +15,9 @@ import java.util.List;
 import io.objectbox.Box;
 import io.objectbox.query.Query;
 
+/**
+ * Created by tantd on 4/9/2020.
+ */
 public class AppDbManager implements DbManager {
 
     private static AppDbManager instance;
