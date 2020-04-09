@@ -1,11 +1,10 @@
 package com.tantd.spyzie.data.network;
 
-import android.location.Location;
-
 import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.model.Event;
+import com.tantd.spyzie.data.model.Location;
 import com.tantd.spyzie.data.model.Sms;
 
 import java.util.List;

@@ -5,6 +5,8 @@ import android.content.Context;
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.core.SingleClick;
 import com.tantd.spyzie.core.SingleItemClick;
+import com.tantd.spyzie.data.db.AppDbManager;
+import com.tantd.spyzie.data.db.DbManager;
 import com.tantd.spyzie.data.device.AppDeviceDataManager;
 import com.tantd.spyzie.data.device.DeviceDataManager;
 import com.tantd.spyzie.data.network.ApiManager;
@@ -55,6 +57,12 @@ public class AppModule {
     @Provides
     public DeviceDataManager provideDeviceDataManager() {
         return AppDeviceDataManager.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public DbManager provideDbManager() {
+        return AppDbManager.getInstance();
     }
 
     @Provides

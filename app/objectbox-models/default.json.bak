@@ -1,0 +1,73 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3503163121749216041",
+      "lastPropertyId": "4:9193879688596840378",
+      "name": "Note",
+      "properties": [
+        {
+          "id": "1:1715031748217520289",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:646799955439500591",
+          "name": "text",
+          "type": 9
+        },
+        {
+          "id": "3:6962222467959578544",
+          "name": "comment",
+          "type": 9
+        },
+        {
+          "id": "4:9193879688596840378",
+          "name": "date",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1278743937107655299",
+      "lastPropertyId": "3:70661452540205712",
+      "name": "Location",
+      "properties": [
+        {
+          "id": "1:2055174257211078143",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:205818663596901587",
+          "name": "lat",
+          "type": 8,
+          "flags": 4
+        },
+        {
+          "id": "3:70661452540205712",
+          "name": "lon",
+          "type": 8,
+          "flags": 4
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:1278743937107655299",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

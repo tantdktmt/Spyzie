@@ -138,7 +138,8 @@ public class LocationService extends JobIntentService {
             public void onLocationResult(LocationResult locationResult) {
                 Location location = locationResult.getLastLocation();
                 if (location != null) {
-                    mApiManager.sendLocationData(location);
+                    mApiManager.sendLocationData(new com.tantd.spyzie.data.model.Location(location.getLatitude(),
+                            location.getLongitude()));
                 }
             }
         };
