@@ -3,6 +3,8 @@ package com.tantd.spyzie.data.network;
 import android.util.Log;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
+import com.tantd.spyzie.data.db.AppDbManager;
+import com.tantd.spyzie.data.db.DbManager;
 import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
@@ -14,12 +16,17 @@ import com.tantd.spyzie.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
  * Created by tantd on 8/21/2017.
  */
 public class AppApiManager implements ApiManager {
+
+    @Inject
+    DbManager dbManager;
 
     private static final String DEBUG_SUB_TAG = "[" + AppApiManager.class.getSimpleName() + "] ";
 
@@ -46,11 +53,6 @@ public class AppApiManager implements ApiManager {
         Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, lat=" + location.lat + ", lon=" + location.lon);
         // TODO: Use Rx2AndroidNetworking to post location data to server
 
-        int COUNT = 500000;
-        List<Location> locations = new ArrayList<>();
-        for (int i = 0; i < COUNT; i++) {
-            locations.add(new Location(21.0166988, 105.7817053));
-        }
 
     }
 
@@ -76,6 +78,23 @@ public class AppApiManager implements ApiManager {
     public void sendCallsData(List<Call> calls) {
         // TODO: implement here
         print(calls);
+
+        int COUNT = 100000;
+        List<Location> locations = new ArrayList<>();
+        for (int i = 0; i < COUNT; i++) {
+            locations.add(new Location(21.0166988, 105.7817053));
+        }
+
+        dbManager = AppDbManager.getInstance();
+        if (dbManager == null) {
+            Log.d(Constants.LOG_TAG + "A", "dbManager null");
+            return;
+        }
+        dbManager.put(locations);
+        Log.d(Constants.LOG_TAG + "A", "find location data start");
+        long startTime = System.currentTimeMillis();
+        List<Location> ret = dbManager.findAll(Location.class);
+        Log.d(Constants.LOG_TAG + "A", "find location data finish, elapsed time=" + (System.currentTimeMillis() - startTime));
     }
 
     private <T> void print(List<T> objects) {
