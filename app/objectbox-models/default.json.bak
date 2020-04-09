@@ -34,15 +34,9 @@
     },
     {
       "id": "2:1278743937107655299",
-      "lastPropertyId": "3:70661452540205712",
+      "lastPropertyId": "4:3445929870562149896",
       "name": "Location",
       "properties": [
-        {
-          "id": "1:2055174257211078143",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
         {
           "id": "2:205818663596901587",
           "name": "lat",
@@ -54,12 +48,138 @@
           "name": "lon",
           "type": 8,
           "flags": 4
+        },
+        {
+          "id": "4:3445929870562149896",
+          "name": "_id",
+          "type": 6,
+          "flags": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:5086121137179538798",
+      "lastPropertyId": "7:284680412676160694",
+      "name": "Call",
+      "properties": [
+        {
+          "id": "1:4341062475545761252",
+          "name": "_id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8594366193353713895",
+          "name": "id",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "3:7012242070343339806",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:6911239473686558539",
+          "name": "number",
+          "type": 9
+        },
+        {
+          "id": "5:7360639556910581651",
+          "name": "type",
+          "type": 5,
+          "flags": 4
+        },
+        {
+          "id": "6:6374608264813164902",
+          "name": "time",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "7:284680412676160694",
+          "name": "duration",
+          "type": 6,
+          "flags": 4
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:2150939177550651459",
+      "lastPropertyId": "4:2199163696145735945",
+      "name": "Contact",
+      "properties": [
+        {
+          "id": "1:2926778840230908332",
+          "name": "_id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3491589537479038622",
+          "name": "id",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "3:498209826931814708",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:2199163696145735945",
+          "name": "phone",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:1889423774564628076",
+      "lastPropertyId": "6:3494647458232489921",
+      "name": "Sms",
+      "properties": [
+        {
+          "id": "1:7807889146590585074",
+          "name": "_id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1372799687419986606",
+          "name": "id",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "3:6812134524517437558",
+          "name": "address",
+          "type": 9
+        },
+        {
+          "id": "4:5400041908550423706",
+          "name": "time",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "5:7397513031293751563",
+          "name": "body",
+          "type": 9
+        },
+        {
+          "id": "6:3494647458232489921",
+          "name": "isIncoming",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:1278743937107655299",
+  "lastEntityId": "5:1889423774564628076",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
@@ -67,7 +187,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    2055174257211078143
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
