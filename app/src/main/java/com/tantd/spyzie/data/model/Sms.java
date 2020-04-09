@@ -1,7 +1,13 @@
 package com.tantd.spyzie.data.model;
 
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+
+@Entity
 public class Sms {
 
+    @Id
+    public long _id;
     public long id;
     public String address;
     public long time;
@@ -22,7 +28,8 @@ public class Sms {
     @Override
     public String toString() {
         return "Sms{" +
-                "id=" + id +
+                "_id=" + _id +
+                ", id=" + id +
                 ", address='" + address + '\'' +
                 ", time=" + time +
                 ", body='" + body + '\'' +

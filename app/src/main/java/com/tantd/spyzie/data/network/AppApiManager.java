@@ -1,6 +1,5 @@
 package com.tantd.spyzie.data.network;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
@@ -8,9 +7,11 @@ import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.model.Event;
+import com.tantd.spyzie.data.model.Location;
 import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.util.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -43,8 +44,15 @@ public class AppApiManager implements ApiManager {
 
     @Override
     public void sendLocationData(Location location) {
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, lat=" + location.getLatitude() + ", lon=" + location.getLongitude());
+        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, lat=" + location.lat + ", lon=" + location.lon);
         // TODO: Use Rx2AndroidNetworking to post location data to server
+
+        int COUNT = 500000;
+        List<Location> locations = new ArrayList<>();
+        for (int i = 0; i < COUNT; i++) {
+            locations.add(new Location(21.0166988, 105.7817053));
+        }
+
     }
 
     @Override

@@ -1,15 +1,15 @@
-package com.tantd.spyzie.core;
+package com.tantd.spyzie.data.db;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.tantd.spyzie.data.db.MyObjectBox;
+import com.tantd.spyzie.data.MyObjectBox;
 import com.tantd.spyzie.util.Constants;
 
 import io.objectbox.BoxStore;
 import io.objectbox.android.AndroidObjectBrowser;
 
-public class ObjectBox {
+public final class ObjectBox {
 
     private static BoxStore boxStore;
 

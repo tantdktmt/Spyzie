@@ -6,7 +6,7 @@ import android.content.Context;
 import androidx.multidex.MultiDex;
 
 import com.androidnetworking.AndroidNetworking;
-import com.tantd.spyzie.core.ObjectBox;
+import com.tantd.spyzie.data.db.ObjectBox;
 import com.tantd.spyzie.di.component.AppComponent;
 import com.tantd.spyzie.di.component.DaggerAppComponent;
 import com.tantd.spyzie.di.component.ServiceComponent;
