@@ -37,11 +37,11 @@
             android:name=".service.LocationService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <activity android:name=".ui.note.NoteActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+<!--        <activity android:name=".ui.note.NoteActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
 </manifest>
