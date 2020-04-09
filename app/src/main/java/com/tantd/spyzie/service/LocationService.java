@@ -72,14 +72,14 @@ public class LocationService extends JobIntentService {
                     + ", isLocationOn=" + isLocationTurnOn);
             if (hasLocationPermissions && isLocationTurnOn) {
                 if (!isUpdatingLocation) {
-                    Log.d(Constants.LOG_TAG, "Update location & start foreground");
+                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Update location & start foreground");
                     startForeground(1, notification);
                     requestLocationUpdates();
                 }
                 isUpdatingLocation = true;
             } else {
                 if (isUpdatingLocation) {
-                    Log.d(Constants.LOG_TAG, "Stop updating location");
+                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Stop updating location");
                     removeLocationUpdates();
                     stopForeground(true);
                     if (!hasLocationPermissions) {
