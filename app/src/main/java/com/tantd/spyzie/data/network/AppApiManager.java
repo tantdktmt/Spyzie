@@ -19,7 +19,6 @@ import io.reactivex.Single;
 /**
  * Created by tantd on 8/21/2017.
  */
-
 public class AppApiManager implements ApiManager {
 
     private static final String DEBUG_SUB_TAG = "[" + AppApiManager.class.getSimpleName() + "] ";
