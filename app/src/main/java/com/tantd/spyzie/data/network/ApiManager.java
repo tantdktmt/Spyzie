@@ -20,7 +20,11 @@ public interface ApiManager {
 
     void sendLocationData(Location location);
 
+    void sendLocationData(List<Location> locations);
+
     void sendSmsData(Sms sms);
+
+    void sendSmsData(List<Sms> sms);
 
     void sendExceptionTracking(Error error);
 

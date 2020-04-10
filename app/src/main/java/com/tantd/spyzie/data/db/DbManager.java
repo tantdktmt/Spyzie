@@ -1,5 +1,10 @@
 package com.tantd.spyzie.data.db;
 
+import com.tantd.spyzie.data.model.Call;
+import com.tantd.spyzie.data.model.Contact;
+import com.tantd.spyzie.data.model.Location;
+import com.tantd.spyzie.data.model.Sms;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -10,11 +15,20 @@ public interface DbManager {
 
     <T> void put(T t);
 
-    <T> void put(T ...ts);
+    void putLocations(Collection<Location> locations);
 
-    <T> void put(Collection<T> collection);
+//    <T> List<T> findAll(Class<T> tClass);
+    List<?> findAll(Class<?> tClass);
 
-    <T> List<T> findAll(Class<T> tClass);
+    List<?> find(Class<?> tClass, long offset, long limit);
 
-    <T> void removeAll(Class<T> tClass);
+    void removeAll(Class<?> tClass);
+
+    void removeLocations(Collection<Location> locations);
+
+    void removeSms(Collection<Sms> sms);
+
+    void removeCalls(Collection<Call> calls);
+
+    void removeContacts(Collection<Contact> contacts);
 }

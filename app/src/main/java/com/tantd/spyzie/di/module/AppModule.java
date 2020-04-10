@@ -12,6 +12,7 @@ import com.tantd.spyzie.data.device.DeviceDataManager;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.data.network.AppApiManager;
 import com.tantd.spyzie.di.ApplicationContext;
+import com.tantd.spyzie.util.JsonUtil;
 import com.tantd.spyzie.util.rx.AppSchedulerProvider;
 import com.tantd.spyzie.util.rx.SchedulerProvider;
 
@@ -73,5 +74,11 @@ public class AppModule {
     @Provides
     public SingleItemClick provideSingleItemClick() {
         return new SingleItemClick();
+    }
+
+    @Singleton
+    @Provides
+    public JsonUtil providesJsonUtil() {
+        return JsonUtil.getInstance();
     }
 }

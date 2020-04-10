@@ -15,6 +15,9 @@ public class Call {
     public long time;
     public long duration;
 
+    public Call() {
+    }
+
     public Call(long id, String name, String number, int type, long time, long duration) {
         this.id = id;
         this.name = name;

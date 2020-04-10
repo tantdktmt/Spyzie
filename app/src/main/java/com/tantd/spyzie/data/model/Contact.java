@@ -21,6 +21,9 @@ public class Contact {
     @Convert(converter = ListConverter.class, dbType = String.class)
     public List<String> phone;
 
+    public Contact() {
+    }
+
     public Contact(long id, String name, List<String> phone) {
         this.id = id;
         this.name = name;
