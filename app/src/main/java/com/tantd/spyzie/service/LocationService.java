@@ -149,5 +149,6 @@ public class LocationService extends JobIntentService {
     public void onDestroy() {
         super.onDestroy();
         Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onDestroy()");
+        stopAllWork();
     }
 }
