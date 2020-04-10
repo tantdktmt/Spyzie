@@ -6,6 +6,7 @@ buildscript {
     versions.work = "2.3.4"
     versions.location = "17.0.0"
     versions.objectboxVersion = "2.5.1"
+    versions.gson = "2.8.6"
 
     repositories {
         google()

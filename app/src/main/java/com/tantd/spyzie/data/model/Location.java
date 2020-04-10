@@ -11,6 +11,9 @@ public class Location {
     public double lat;
     public double lon;
 
+    public Location() {
+    }
+
     public Location(double lat, double lon) {
         this.lat = lat;
         this.lon = lon;
@@ -23,5 +26,9 @@ public class Location {
                 ", lat=" + lat +
                 ", lon=" + lon +
                 '}';
+    }
+
+    public boolean isSameValueWith(Location other) {
+        return other != null && lat == other.lat && lon == other.lon;
     }
 }
