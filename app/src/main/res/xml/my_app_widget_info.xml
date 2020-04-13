@@ -6,4 +6,5 @@
     android:minHeight="40dp"
     android:previewImage="@drawable/app_widget_preview"
     android:updatePeriodMillis="86400000"
-    android:widgetCategory="home_screen"></appwidget-provider>
+    android:widgetCategory="home_screen"
+    android:configure="com.tantd.spyzie.ui.PermissionActivity"></appwidget-provider>

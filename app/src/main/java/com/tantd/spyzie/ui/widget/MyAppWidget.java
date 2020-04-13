@@ -1,5 +1,7 @@
 package com.tantd.spyzie.ui.widget;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.util.Log;
 
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.service.MainService;
+import com.tantd.spyzie.ui.PermissionActivity;
 import com.tantd.spyzie.util.Constants;
 
 /**
@@ -18,14 +21,28 @@ public class MyAppWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onEnabled()");
-        Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
-        SpyzieApplication.getInstance().startService(serviceIntent);
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onEnabled()");
+        }
+//        Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
+//        SpyzieApplication.getInstance().startService(serviceIntent);
+//        Intent intent = new Intent(SpyzieApplication.getInstance(), PermissionActivity.class);
+//        SpyzieApplication.getInstance().startActivity(intent);
+    }
+
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onUpdate()");
+        }
     }
 
     @Override
     public void onDisabled(Context context) {
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onDisabled()");
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onDisabled()");
+        }
         Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
         SpyzieApplication.getInstance().stopService(serviceIntent);
     }
