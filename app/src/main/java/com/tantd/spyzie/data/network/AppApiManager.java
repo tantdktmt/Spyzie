@@ -57,8 +57,7 @@ public class AppApiManager implements ApiManager {
     public void sendLocationData(List<Location> locations) {
         String json = JsonUtil.getInstance().toJson(locations);
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "sendLocationData, size=" + locations.size());
-            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "sendLocationData, json=" + json);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, size=" + locations.size() + ", json=" + json);
         }
         if (Constants.IS_API_ACIVE) {
 
@@ -77,7 +76,15 @@ public class AppApiManager implements ApiManager {
 
     @Override
     public void sendSmsData(List<Sms> sms) {
+        String json = JsonUtil.getInstance().toJson(sms);
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendSmsData, size=" + sms.size() + ", json=" + json);
+        }
+        if (Constants.IS_API_ACIVE) {
 
+        } else {
+
+        }
     }
 
     @Override
