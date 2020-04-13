@@ -59,7 +59,7 @@ public class AppDbManager implements DbManager {
     @Override
     public <T> void put(T t) {
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "put, t=" + t);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "put, t=" + t);
         }
         if (t instanceof Location) {
             mLocationBox.put((Location) t);

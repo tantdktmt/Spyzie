@@ -1,6 +1,5 @@
 package com.tantd.spyzie.ui.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.util.Log;
 
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.service.MainService;
-import com.tantd.spyzie.ui.PermissionActivity;
 import com.tantd.spyzie.util.Constants;
 
 /**
@@ -24,10 +22,6 @@ public class MyAppWidget extends AppWidgetProvider {
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onEnabled()");
         }
-//        Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
-//        SpyzieApplication.getInstance().startService(serviceIntent);
-//        Intent intent = new Intent(SpyzieApplication.getInstance(), PermissionActivity.class);
-//        SpyzieApplication.getInstance().startActivity(intent);
     }
 
     @Override
