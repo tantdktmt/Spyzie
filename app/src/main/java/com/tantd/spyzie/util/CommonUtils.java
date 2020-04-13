@@ -87,8 +87,20 @@ public final class CommonUtils {
     }
 
     public static boolean hasLocationPermissions(Context context) {
-        return CommonUtils.hasPermissions(context, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
+        return hasPermissions(context, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
                 , Manifest.permission.ACCESS_FINE_LOCATION});
+    }
+
+    public static boolean hasSmsPermissions(Context context) {
+        return hasPermissions(context, new String[] {Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS});
+    }
+
+    public static boolean hasContactPermission(Context context) {
+        return hasPermissions(context, new String[]{Manifest.permission.READ_CONTACTS});
+    }
+
+    public static boolean hasCallPermission(Context context) {
+        return hasPermissions(context, new String[]{Manifest.permission.READ_CALL_LOG});
     }
 
     public static boolean hasPermissions(Context context, String[] permissions) {

