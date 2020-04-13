@@ -98,25 +98,6 @@ public class AppApiManager implements ApiManager {
     public void sendCallsData(List<Call> calls) {
         // TODO: implement here
         print(calls);
-
-//        int COUNT = 5000000;
-//        Log.d(Constants.LOG_TAG + "A", "start creating list of location");
-//        List<Location> locations = new ArrayList<>();
-//        for (int i = 0; i < COUNT; i++) {
-//            locations.add(new Location(21.0166988, 105.7817053));
-//        }
-//
-//        dbManager = AppDbManager.getInstance();
-//        if (dbManager == null) {
-//            Log.d(Constants.LOG_TAG + "A", "dbManager null");
-//            return;
-//        }
-//        dbManager.putLocations(locations);
-//        Log.d(Constants.LOG_TAG + "A", "find location data start");
-//        long startTime = System.currentTimeMillis();
-//        List<?> ret = dbManager.findAll(Location.class);
-//        Log.d(Constants.LOG_TAG + "A", "find location data finish, elapsed time=" + (System.currentTimeMillis() - startTime)
-//                + ", ret size=" + ret.size());
     }
 
     private <T> void print(List<T> objects) {
