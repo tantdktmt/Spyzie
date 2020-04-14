@@ -239,6 +239,7 @@ public class MainService extends Service {
         WorkManager.getInstance(this).cancelWorkById(mGetCallsWorkRequest.getId());
         WorkManager.getInstance(this).cancelWorkById(mGetContactsWorkRequest.getId());
         running = false;
+        removeLocationUpdates();
     }
 
     @Nullable
