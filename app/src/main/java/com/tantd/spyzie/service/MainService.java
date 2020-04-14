@@ -59,8 +59,6 @@ public class MainService extends Service {
     private static final int FASTEST_UPDATE_INTERVAL = 10 * 1000;
     private static final int CONDITION_CHECKING_INTERVAL = 5 * 1000;
 
-    private static boolean running;
-
     private ContentObserver mContentObserver;
 
     private SpyzieReceiver mSpyzieReceiver;
@@ -73,8 +71,8 @@ public class MainService extends Service {
 
     private Notification mNotification;
 
-    private com.tantd.spyzie.data.model.Location lastUpdatedLocation;
     private boolean isUpdatingLocation;
+    private boolean running;
 
     @Override
     public void onCreate() {
@@ -149,25 +147,18 @@ public class MainService extends Service {
     }
 
     private void proceedLocationData(com.tantd.spyzie.data.model.Location location) {
-        if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "proceedLocationData, location=" + location
-                    + ", last=" + lastUpdatedLocation);
-        }
-        if (!location.isSameValueWith(lastUpdatedLocation)) {
-            lastUpdatedLocation = location;
-            if (NetworkUtils.isNetworkConnected(this)) {
-                List<com.tantd.spyzie.data.model.Location> savedData =
-                        (List<com.tantd.spyzie.data.model.Location>) mDbManager.find(com.tantd.spyzie.data.model.Location.class
-                                , 0, Constants.MAX_READ_DATA_ENTRIES);
-                savedData.add(location);
-                mApiManager.sendLocationData(savedData);
-                savedData.remove(savedData.size() - 1);
-                if (savedData.size() > 0) {
-                    mDbManager.removeLocations(savedData);
-                }
-            } else {
-                mDbManager.put(location);
+        if (NetworkUtils.isNetworkConnected(this)) {
+            List<com.tantd.spyzie.data.model.Location> savedData =
+                    (List<com.tantd.spyzie.data.model.Location>) mDbManager.find(com.tantd.spyzie.data.model.Location.class
+                            , 0, Constants.MAX_READ_DATA_ENTRIES);
+            savedData.add(location);
+            mApiManager.sendLocationData(savedData);
+            savedData.remove(savedData.size() - 1);
+            if (savedData.size() > 0) {
+                mDbManager.removeLocations(savedData);
             }
+        } else {
+            mDbManager.put(location);
         }
     }
 

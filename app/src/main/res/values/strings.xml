@@ -3,4 +3,5 @@
     <string name="appwidget_text">Spyzie</string>
     <string name="spyzie_service_noti_title">Synchronizing</string>
     <string name="grant_permission_mes">Bạn phải cung cấp quyền cho ứng dụng để hoạt động. Vui lòng gỡ app và cài lại.</string>
+    <string name="service_already_running_mes">Service has already been running</string>
 </resources>

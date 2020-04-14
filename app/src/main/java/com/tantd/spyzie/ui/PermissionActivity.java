@@ -46,12 +46,17 @@ public class PermissionActivity extends BaseActivity {
         }
 
         btStart = findViewById(R.id.bt_start);
-        btStart.setEnabled(false);
 
-        if (!CommonUtils.hasPermissions(this, PERMISSIONS)) {
+        setResult(RESULT_CANCELED);
+        if (CommonUtils.hasPermissions(this, PERMISSIONS)) {
+            if (CommonUtils.isMyServiceRunning(this, MainService.class)) {
+                showToast(R.string.service_already_running_mes);
+                finish();
+            }
+        } else {
+            btStart.setEnabled(false);
             requestPermissions();
         }
-        setResult(RESULT_CANCELED);
     }
 
     private void requestPermissions() {
@@ -99,9 +104,13 @@ public class PermissionActivity extends BaseActivity {
             Intent result = new Intent();
             result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             setResult(RESULT_OK, result);
-            Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
-            ContextCompat.startForegroundService(SpyzieApplication.getInstance(), serviceIntent);
+            startMainService();
             finish();
         }
+    }
+
+    private void startMainService() {
+        Intent serviceIntent = new Intent(SpyzieApplication.getInstance(), MainService.class);
+        ContextCompat.startForegroundService(SpyzieApplication.getInstance(), serviceIntent);
     }
 }
