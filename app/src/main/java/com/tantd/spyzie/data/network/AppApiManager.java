@@ -55,15 +55,10 @@ public class AppApiManager implements ApiManager {
 
     @Override
     public void sendLocationData(List<Location> locations) {
-        String json = JsonUtil.getInstance().toJson(locations);
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, size=" + locations.size() + ", json=" + json);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendLocationData, size=" + locations.size());
         }
-        if (Constants.IS_API_ACIVE) {
-
-        } else {
-
-        }
+        sendData(locations);
     }
 
     @Override
@@ -76,9 +71,32 @@ public class AppApiManager implements ApiManager {
 
     @Override
     public void sendSmsData(List<Sms> sms) {
-        String json = JsonUtil.getInstance().toJson(sms);
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendSmsData, size=" + sms.size() + ", json=" + json);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendSmsData, size=" + sms.size());
+        }
+        sendData(sms);
+    }
+
+    @Override
+    public void sendContactsData(List<Contact> contacts) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendContactsData, size=" + contacts.size());
+        }
+        sendData(contacts);
+    }
+
+    @Override
+    public void sendCallsData(List<Call> calls) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendCallsData, size=" + calls.size());
+        }
+        sendData(calls);
+    }
+
+    private void sendData(List<?> objects) {
+        String json = JsonUtil.getInstance().toJson(objects);
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendData, json=" + json);
         }
         if (Constants.IS_API_ACIVE) {
 
@@ -89,35 +107,16 @@ public class AppApiManager implements ApiManager {
 
     @Override
     public void sendExceptionTracking(Error error) {
-        // TODO: implement here
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendExceptionTracking, error=" + error + ", errorValue=" + error.ordinal());
         }
-    }
-
-    @Override
-    public void sendContactsData(List<Contact> contacts) {
         // TODO: implement here
-        printContacts(contacts);
-    }
-
-    @Override
-    public void sendCallsData(List<Call> calls) {
-        // TODO: implement here
-        print(calls);
     }
 
     private <T> void print(List<T> objects) {
         for (T t :
                 objects) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + t);
-        }
-    }
-
-    private void printContacts(List<Contact> contacts) {
-        for (Contact contact :
-                contacts) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + contact);
         }
     }
 }
