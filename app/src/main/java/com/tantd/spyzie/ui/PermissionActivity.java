@@ -70,6 +70,7 @@ public class PermissionActivity extends BaseActivity {
             btStart.setEnabled(true);
         } else {
             showToast(R.string.grant_permission_mes);
+            finish();
         }
     }
 
