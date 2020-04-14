@@ -18,7 +18,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -111,13 +113,19 @@ public class MainService extends Service {
     }
 
     private void startGetCallsWorkRequest() {
-        mGetCallsWorkRequest = new PeriodicWorkRequest.Builder(GetCallsWorker.class, 24, TimeUnit.HOURS).build();
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        mGetCallsWorkRequest = new PeriodicWorkRequest.Builder(GetCallsWorker.class, 24, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetCallsWorker.GET_CALLS_WORK_REQUEST,
                 ExistingPeriodicWorkPolicy.KEEP, mGetCallsWorkRequest);
     }
 
     private void startGetContactsWorkRequest() {
-        mGetContactsWorkRequest = new PeriodicWorkRequest.Builder(GetContactsWorker.class, 24, TimeUnit.HOURS).build();
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        mGetContactsWorkRequest = new PeriodicWorkRequest.Builder(GetContactsWorker.class, 24, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetContactsWorker.GET_CONTACTS_WORK_REQUEST,
                 ExistingPeriodicWorkPolicy.KEEP, mGetContactsWorkRequest);
     }

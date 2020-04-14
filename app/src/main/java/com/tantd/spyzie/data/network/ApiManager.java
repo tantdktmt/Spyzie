@@ -26,9 +26,9 @@ public interface ApiManager {
 
     void sendSmsData(List<Sms> sms);
 
-    void sendExceptionTracking(Error error);
-
     void sendContactsData(List<Contact> contacts);
 
     void sendCallsData(List<Call> calls);
+
+    void sendExceptionTracking(Error error);
 }
