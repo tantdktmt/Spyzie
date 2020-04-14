@@ -136,7 +136,7 @@ public class AppDbManager implements DbManager {
     @Override
     public void removeLocations(Collection<Location> locations) {
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG + "A", DEBUG_SUB_TAG + "removeLocations, count=" + locations.size());
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "removeLocations, count=" + locations.size());
         }
         if (locations.size() > 0) {
             mLocationBox.remove(locations);
