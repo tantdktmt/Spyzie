@@ -11,15 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Cấp quyền cho ứng dụng"
+        android:text="@string/mes_allow_permissions"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/permission_activity_component_gap"
+        android:hint="@string/email_hint"
+        app:layout_constraintTop_toBottomOf="@id/tv_message" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/permission_activity_component_gap"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/et_email" />
 
     <Button
         android:id="@+id/bt_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/permission_activity_component_gap"
         android:onClick="onClick"
-        android:text="Click here to start"
-        app:layout_constraintTop_toBottomOf="@id/tv_message" />
+        android:text="@string/btn_start_text"
+        app:layout_constraintTop_toBottomOf="@id/et_password" />
 </androidx.constraintlayout.widget.ConstraintLayout>
