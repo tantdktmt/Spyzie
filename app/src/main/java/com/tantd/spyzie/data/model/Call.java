@@ -1,5 +1,7 @@
 package com.tantd.spyzie.data.model;
 
+import com.google.gson.annotations.Expose;
+
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
@@ -8,11 +10,17 @@ public class Call {
 
     @Id
     public long _id;
+    @Expose
     public long id;
+    @Expose
     public String name;
+    @Expose
     public String number;
+    @Expose
     public int type;
+    @Expose
     public long time;
+    @Expose
     public long duration;
 
     public Call() {

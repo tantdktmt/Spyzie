@@ -2,6 +2,8 @@ package com.tantd.spyzie.data.model;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,8 +18,11 @@ public class Contact {
 
     @Id
     public long _id;
+    @Expose
     public long id;
+    @Expose
     public String name;
+    @Expose
     @Convert(converter = ListConverter.class, dbType = String.class)
     public List<String> phone;
 

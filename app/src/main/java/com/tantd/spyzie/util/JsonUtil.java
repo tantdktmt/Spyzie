@@ -1,6 +1,7 @@
 package com.tantd.spyzie.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Created by tantd on 4/10/2020.
@@ -19,7 +20,7 @@ public final class JsonUtil {
     }
 
     private JsonUtil() {
-        mGson = new Gson();
+        mGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     }
 
     public <T> String toJson(T t) {
