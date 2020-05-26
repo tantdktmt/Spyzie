@@ -69,7 +69,7 @@ public class PermissionActivity extends BaseActivity {
         if (requestCode == PERMISSIONS_REQUEST_CODE && isAllPermissionsGranted(grantResults)) {
             btStart.setEnabled(true);
         } else {
-            showToast(R.string.grant_permission_mes);
+            showToast(R.string.error_permissions_rejected);
             finish();
         }
     }
