@@ -7,4 +7,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="permission_activity_component_gap">10dp</dimen>
+    <dimen name="permission_activity_padding">10dp</dimen>
+    <dimen name="permission_activity_edit_text_padding">5dp</dimen>
 </resources>
