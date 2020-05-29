@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/permission_activity_padding"
     tools:context=".ui.PermissionActivity">
 
     <TextView
@@ -19,7 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/permission_activity_component_gap"
+        android:background="@drawable/bg_et_red_stroke"
         android:hint="@string/email_hint"
+        android:padding="@dimen/permission_activity_padding"
         app:layout_constraintTop_toBottomOf="@id/tv_message" />
 
     <EditText
@@ -27,8 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/permission_activity_component_gap"
+        android:background="@drawable/bg_et_red_stroke"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
+        android:padding="@dimen/permission_activity_padding"
         app:layout_constraintTop_toBottomOf="@id/et_email" />
 
     <Button
