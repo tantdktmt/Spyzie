@@ -12,4 +12,6 @@
     <color name="toolbar_text">#8f000000</color>
     <color name="accent">#2789e4</color>
     <color name="black_effective">#2a2a2a</color>
+    <color name="green_light">#66d966</color>
+    <color name="gray_light">#9999</color>
 </resources>

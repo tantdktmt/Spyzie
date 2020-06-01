@@ -4,6 +4,7 @@
     <string name="spyzie_service_noti_title">Synchronizing</string>
     <string name="error_permissions_rejected">Bạn phải cung cấp quyền cho ứng dụng để hoạt động. Vui lòng gỡ app và cài lại.</string>
     <string name="mes_allow_permissions">Cấp quyền cho ứng dụng</string>
+    <string name="mes_login">Đăng nhập</string>
     <string name="btn_start_text">Bắt đầu</string>
     <string name="service_already_running_mes">Service has already been running</string>
     <string name="email_hint">Email</string>
