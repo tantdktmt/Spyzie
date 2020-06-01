@@ -2,11 +2,14 @@ package com.tantd.spyzie.ui;
 
 import android.Manifest;
 import android.appwidget.AppWidgetManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,11 +19,23 @@ import androidx.core.content.ContextCompat;
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.core.BaseActivity;
+import com.tantd.spyzie.data.model.Error;
+import com.tantd.spyzie.data.model.LoginData;
+import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.service.MainService;
 import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
+import com.tantd.spyzie.util.DialogUtils;
+import com.tantd.spyzie.util.rx.SchedulerProvider;
+
+import javax.inject.Inject;
 
 public class PermissionActivity extends BaseActivity {
+
+    @Inject
+    ApiManager apiManager;
+    @Inject
+    SchedulerProvider schedulerProvider;
 
     private static final String DEBUG_SUB_TAG = "[" + PermissionActivity.class.getSimpleName() + "] ";
 
@@ -34,18 +49,23 @@ public class PermissionActivity extends BaseActivity {
             , Manifest.permission.READ_CALL_LOG};
 
     private View btStart;
+    private EditText etEmail;
+    private EditText etPassword;
 
     private int appWidgetId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SpyzieApplication.getInstance().getAppComponent().inject(this);
         setContentView(R.layout.activity_permission);
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onCreate");
         }
 
         btStart = findViewById(R.id.bt_start);
+        etEmail = findViewById(R.id.et_email);
+        etPassword = findViewById(R.id.et_password);
 
         setResult(RESULT_CANCELED);
         if (CommonUtils.hasPermissions(this, PERMISSIONS)) {
@@ -91,7 +111,36 @@ public class PermissionActivity extends BaseActivity {
     }
 
     public void onClick(View view) {
+        handleLogin();
+    }
+
+    private void handleLogin() {
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            DialogUtils.showMessageDialog(this, R.string.mes_login_email_password_blank,
+                    (dialog, which) -> resetInput());
+        } else {
+            apiManager.login(new LoginData.Request(email, password)).subscribeOn(schedulerProvider.io())
+                    .observeOn(schedulerProvider.ui()).subscribe(response -> handleLoginSuccess(response),
+                    error -> handleLoginError(error));
+        }
+    }
+
+    private void handleLoginSuccess(LoginData.Response response) {
+        showToast(R.string.noti_service_started);
+        apiManager.storeAccessToken(response.getToken());
         showAppWidget();
+    }
+
+    private void handleLoginError(Throwable error) {
+        showToast("Login error");
+        finish();
+    }
+
+    private void resetInput() {
+        etEmail.setText("");
+        etPassword.setText("");
     }
 
     private void showAppWidget() {

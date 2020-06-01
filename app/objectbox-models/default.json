@@ -34,7 +34,7 @@
     },
     {
       "id": "2:1278743937107655299",
-      "lastPropertyId": "4:3445929870562149896",
+      "lastPropertyId": "5:7564892733248440914",
       "name": "Location",
       "properties": [
         {
@@ -54,6 +54,12 @@
           "name": "_id",
           "type": 6,
           "flags": 1
+        },
+        {
+          "id": "5:7564892733248440914",
+          "name": "time",
+          "type": 6,
+          "flags": 4
         }
       ],
       "relations": []

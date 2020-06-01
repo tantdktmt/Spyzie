@@ -1,10 +1,12 @@
 package com.tantd.spyzie.data.network;
 
 import com.tantd.spyzie.data.model.Call;
+import com.tantd.spyzie.data.model.CommonResponse;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.model.Event;
 import com.tantd.spyzie.data.model.Location;
+import com.tantd.spyzie.data.model.LoginData;
 import com.tantd.spyzie.data.model.Sms;
 
 import java.util.List;
@@ -18,17 +20,23 @@ public interface ApiManager {
 
     Single<List<Event>> getSchedules();
 
-    void sendLocationData(Location location);
+    Single<LoginData.Response> login(LoginData.Request account);
 
-    void sendLocationData(List<Location> locations);
+    void storeAccessToken(String accessToken);
 
-    void sendSmsData(Sms sms);
+    String getAccessToken();
 
-    void sendSmsData(List<Sms> sms);
+    Single<CommonResponse> sendLocationData(Location location);
 
-    void sendContactsData(List<Contact> contacts);
+    Single<CommonResponse> sendLocationData(List<Location> locations);
 
-    void sendCallsData(List<Call> calls);
+    Single<CommonResponse> sendSmsData(Sms sms);
 
-    void sendExceptionTracking(Error error);
+    Single<CommonResponse> sendSmsData(List<Sms> sms);
+
+    Single<CommonResponse> sendContactsData(List<Contact> contacts);
+
+    Single<CommonResponse> sendCallsData(List<Call> calls);
+
+    Single<CommonResponse> sendExceptionTracking(Error error);
 }

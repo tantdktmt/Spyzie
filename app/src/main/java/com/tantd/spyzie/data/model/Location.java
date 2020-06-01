@@ -13,14 +13,16 @@ public class Location {
     @Expose
     public double lat;
     @Expose
-    public double lon;
+    public double lon;@Expose
+    public long time;
 
     public Location() {
     }
 
-    public Location(double lat, double lon) {
+    public Location(double lat, double lon, long time) {
         this.lat = lat;
         this.lon = lon;
+        this.time = time;
     }
 
     @Override
@@ -29,6 +31,7 @@ public class Location {
                 "_id=" + _id +
                 ", lat=" + lat +
                 ", lon=" + lon +
+                ", time=" + time +
                 '}';
     }
 

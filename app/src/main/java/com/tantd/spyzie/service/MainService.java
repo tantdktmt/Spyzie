@@ -139,7 +139,7 @@ public class MainService extends Service {
                 Location location = locationResult.getLastLocation();
                 if (location != null) {
                     proceedLocationData(new com.tantd.spyzie.data.model.Location(location.getLatitude(),
-                            location.getLongitude()));
+                            location.getLongitude(), location.getTime()));
                 }
             }
         };
