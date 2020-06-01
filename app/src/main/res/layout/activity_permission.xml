@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/mes_allow_permissions"
+        android:text="@string/mes_login"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/permission_activity_component_gap"
-        android:background="@drawable/bg_et_red_stroke"
+        android:background="@drawable/bg_et_selector_green_rounded"
         android:hint="@string/email_hint"
         android:padding="@dimen/permission_activity_padding"
         app:layout_constraintTop_toBottomOf="@id/tv_message" />
@@ -30,17 +30,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/permission_activity_component_gap"
-        android:background="@drawable/bg_et_red_stroke"
+        android:background="@drawable/bg_et_selector_green_rounded"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
         android:padding="@dimen/permission_activity_padding"
         app:layout_constraintTop_toBottomOf="@id/et_email" />
 
-    <Button
+    <com.tantd.spyzie.ui.widget.AutoBgButton
         android:id="@+id/bt_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/permission_activity_component_gap"
+        android:layout_marginTop="@dimen/permission_activity_component_gap_2"
+        android:background="@drawable/bg_bt_selector_green_rounded"
         android:onClick="onClick"
         android:text="@string/btn_start_text"
         app:layout_constraintTop_toBottomOf="@id/et_password" />
