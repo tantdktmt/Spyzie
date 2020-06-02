@@ -6,6 +6,7 @@
     <string name="mes_allow_permissions">Allow permissions</string>
     <string name="mes_login">Login with your account</string>
     <string name="mes_login_email_password_blank">Email and password must not be blank!</string>
+    <string name="mes_login_failure">The email or password are incorrect</string>
     <string name="btn_start_text">Click here to start</string>
     <string name="service_already_running_mes">Service has already been running</string>
     <string name="email_hint">Email</string>

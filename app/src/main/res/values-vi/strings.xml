@@ -6,6 +6,7 @@
     <string name="mes_allow_permissions">Cấp quyền cho ứng dụng</string>
     <string name="mes_login">Đăng nhập</string>
     <string name="mes_login_email_password_blank">Bạn phải nhập email và password!</string>
+    <string name="mes_login_failure">Email hoặc password không đúng</string>
     <string name="btn_start_text">Bắt đầu</string>
     <string name="service_already_running_mes">Service has already been running</string>
     <string name="email_hint">Email</string>

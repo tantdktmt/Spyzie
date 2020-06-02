@@ -134,13 +134,14 @@ public class PermissionActivity extends BaseActivity {
     }
 
     private void handleLoginError(Throwable error) {
-        showToast("Login error");
-        finish();
+        DialogUtils.showMessageDialog(this, R.string.mes_login_failure,
+                (dialog, which) -> resetInput());
     }
 
     private void resetInput() {
         etEmail.setText("");
         etPassword.setText("");
+        etEmail.requestFocus();
     }
 
     private void showAppWidget() {
