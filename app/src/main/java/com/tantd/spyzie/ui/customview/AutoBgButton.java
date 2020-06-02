@@ -1,4 +1,4 @@
-package com.tantd.spyzie.ui.widget;
+package com.tantd.spyzie.ui.customview;
 
 import android.content.Context;
 import android.graphics.Color;
