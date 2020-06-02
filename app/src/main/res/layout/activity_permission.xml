@@ -36,7 +36,7 @@
         android:padding="@dimen/permission_activity_padding"
         app:layout_constraintTop_toBottomOf="@id/et_email" />
 
-    <com.tantd.spyzie.ui.widget.AutoBgButton
+    <com.tantd.spyzie.ui.customview.AutoBgButton
         android:id="@+id/bt_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
