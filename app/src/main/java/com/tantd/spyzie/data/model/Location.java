@@ -13,7 +13,8 @@ public class Location {
     @Expose
     public double lat;
     @Expose
-    public double lon;@Expose
+    public double lon;
+    @Expose
     public long time;
 
     public Location() {
