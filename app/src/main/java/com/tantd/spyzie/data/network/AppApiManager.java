@@ -169,7 +169,9 @@ public class AppApiManager implements ApiManager {
     private <T> void print(List<T> objects) {
         for (T t :
                 objects) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + t);
+            if (Constants.IS_DEBUG_MODE) {
+                Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + t);
+            }
         }
     }
 }

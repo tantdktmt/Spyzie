@@ -84,7 +84,9 @@ public class MainService extends Service {
     public void onCreate() {
         createServiceComponent();
         super.onCreate();
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onCreate()");
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onCreate()");
+        }
 
         mContentObserver = new SmsObserver(new Handler(), this);
         getContentResolver().registerContentObserver(Uri.parse("content://sms"), true, mContentObserver);
@@ -100,7 +102,9 @@ public class MainService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onStartCommand()");
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onStartCommand()");
+        }
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
@@ -209,17 +213,23 @@ public class MainService extends Service {
             while (running) {
                 boolean hasLocationPermissions = CommonUtils.hasLocationPermissions(MainService.this);
                 boolean isLocationTurnOn = CommonUtils.isLocationTurnOn(MainService.this);
-                Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "hasPermissions=" + hasLocationPermissions
-                        + ", isLocationOn=" + isLocationTurnOn);
+                if (Constants.IS_DEBUG_MODE) {
+                    Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "hasPermissions=" + hasLocationPermissions
+                            + ", isLocationOn=" + isLocationTurnOn);
+                }
                 if (hasLocationPermissions && isLocationTurnOn) {
                     if (!isUpdatingLocation) {
-                        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Update location");
+                        if (Constants.IS_DEBUG_MODE) {
+                            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Update location");
+                        }
                         requestLocationUpdates();
                     }
                     isUpdatingLocation = true;
                 } else {
                     if (isUpdatingLocation) {
-                        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Stop updating location");
+                        if (Constants.IS_DEBUG_MODE) {
+                            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Stop updating location");
+                        }
                         removeLocationUpdates();
                         if (!hasLocationPermissions) {
                             mApiManager.sendExceptionTracking(Error.HAS_NO_LOCATION_PERMISSIONS);
@@ -255,7 +265,9 @@ public class MainService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onDestroy()");
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "onDestroy()");
+        }
 
         getContentResolver().unregisterContentObserver(mContentObserver);
         unregisterReceiver(mSpyzieReceiver);
