@@ -30,12 +30,13 @@ import javax.inject.Inject;
 public class GetContactsWorker extends Worker {
 
     public static final String GET_CONTACTS_WORK_REQUEST = "GET_CONTACTS_WORK_REQUEST";
-    private static final String DEBUG_SUB_TAG = "[" + GetContactsWorker.class.getSimpleName() + "] ";
 
     @Inject
     ApiManager mApiManager;
     @Inject
     SchedulerProvider mSchedulerProvider;
+
+    private static final String DEBUG_SUB_TAG = "[" + GetContactsWorker.class.getSimpleName() + "] ";
 
     public GetContactsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -51,6 +52,7 @@ public class GetContactsWorker extends Worker {
                     .observeOn(mSchedulerProvider.ui())
                     .subscribe(commonResponse -> handleSendingSuccess(commonResponse),
                             error -> handleSendingError(error));
+
             return Result.success();
         } else {
             mApiManager.sendExceptionTracking(Error.HAS_NO_READ_CONTACTS_PERMISSION);
@@ -60,13 +62,13 @@ public class GetContactsWorker extends Worker {
 
     private void handleSendingSuccess(CommonResponse commonResponse) {
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Success, response=" + commonResponse);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingSuccess, response=" + commonResponse);
         }
     }
 
     private void handleSendingError(Throwable error) {
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "Error: " + error);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingError: " + error);
         }
     }
 

