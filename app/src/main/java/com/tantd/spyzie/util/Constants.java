@@ -9,6 +9,6 @@ public final class Constants {
     public static final long SINGLE_CLICK_THRESHOLD = 1000;
     public static final int MAX_READ_DATA_ENTRIES = 50000;
     public static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
-    public static final boolean IS_DEBUG_MODE = true;
+    public static final boolean IS_DEBUG_MODE = false;
     public static final boolean IS_API_ACIVE = true;
 }
