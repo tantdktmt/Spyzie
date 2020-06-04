@@ -15,7 +15,7 @@ http://frogermcs.github.io/dependency-injection-with-dagger-2-custom-scopes/
 <br />
 3. FastAndroidNetworking: https://github.com/amitshekhariitbhu/Fast-Android-Networking
 <br />
-4. Object: https://github.com/objectbox/objectbox-examples/
+4. ObjectBox: https://github.com/objectbox/objectbox-examples/
 <br />
 5. WorkManager: https://medium.com/androiddevelopers/introducing-workmanager-2083bcfc4712
 <br />
