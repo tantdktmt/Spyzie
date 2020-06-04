@@ -10,4 +10,5 @@ public final class ApiEndPoint {
     public static final String SMS = BASE_URL + "sms";
     public static final String LOCATION = BASE_URL + "locations";
     public static final String ERROR_TRACKING = BASE_URL + "error-tracking";
+    public static final String REFRESH_TOKEN = BASE_URL + "token/refresh";
 }

