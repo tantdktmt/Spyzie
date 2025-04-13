@@ -2,9 +2,7 @@
 Track activities remotely on any Android devices (phones, tablets).
 <br/>
 
-<h2>Description: </h2>Provide a service run in background without user awareness, periodically collect device informations (location, messages, contacts, calls, ...) and send data to back end server.
-<br />Data are collected even there is no internet, and stored in device database.
-<br/>
+<h2>Description: </h2>This service operates seamlessly in the background, without disrupting the user experience. It periodically gathers essential device information—including location, messages, contacts, and call logs—and transmits the data to a secure backend server. Even in the absence of an internet connection, all collected data is reliably stored in the device's local database and synchronized automatically once connectivity is restored.
 
 <h2>Library reference resources: </h2>
 1. RxJava2/RxAndroid: https://www.vogella.com/tutorials/RxJava/article.html
