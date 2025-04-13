@@ -19,7 +19,7 @@ http://frogermcs.github.io/dependency-injection-with-dagger-2-custom-scopes/
 <br />
 6. Android getting GPS Location with Fused Location Provider API
 <br />
-<h2>Project architecture</h2> This project is developed followed to MVP architecture
+<h2>Project architecture</h2> The project is architected using the Model-View-Presenter (MVP) design pattern, ensuring a clear separation of concerns. This structure enhances testability, maintainability, and scalability by decoupling the presentation layer from business logic and data handling components.
 
 ### License
 ```
